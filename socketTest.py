@@ -16,3 +16,5 @@ def disconnect():
 
 sio.connect('http://localhost:3000')
 sio.wait()
+
+sio.emit('my message', {'foo': 'bar'})
