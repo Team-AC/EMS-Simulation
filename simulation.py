@@ -40,7 +40,7 @@ def is_time_between(check_time):
     return 0
 
 def realTimeData():
-    threading.Timer(15.0, realTimeData).start()
+    threading.Timer(300.0, realTimeData).start()
 
     TimeStamp = datetime.now().isoformat()
     Power = is_time_between(datetime.now().time())
