@@ -51,10 +51,10 @@ def realTimeData():
 
 data = []
 
-while counter < 5760:
+while counter < 288:
 
     counter = counter + 1
-    pst24 = pst24 + timedelta(0, 15)
+    pst24 = pst24 + timedelta(0, 300)
 
     TimeStamp = pst24.isoformat()
     Power = is_time_between(pst24.time())
