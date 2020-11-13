@@ -4,11 +4,15 @@ sio = socketio.Client()
 
 @sio.event
 def connect():
-    print('connection established')
+    print("I'm connected!")
+
+@sio.event
+def connect_error():
+    print("The connection failed!")
 
 @sio.event
 def disconnect():
-    print('disconnected from server')
+    print("I'm disconnected!")
 
 sio.connect('http://localhost:3000')
 sio.wait()
