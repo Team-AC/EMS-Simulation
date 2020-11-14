@@ -3,6 +3,9 @@ import threading
 import random
 import requests
 import json
+import socketio
+
+sio = socketio.Client()
 
 my_date = datetime.now()
 yesterday = datetime.now()-timedelta(1)
@@ -39,6 +42,19 @@ def is_time_between(check_time):
 
     return 0
 
+@sio.event
+def connect():
+    print("I'm connected!")
+
+@sio.event
+def connect_error():
+    print("The connection failed!")
+
+@sio.event
+def disconnect():
+    print("I'm disconnected!")
+
+
 def realTimeData():
     threading.Timer(300.0, realTimeData).start()
 
@@ -51,6 +67,8 @@ def realTimeData():
 
 data = []
 
+sio.connect('http://localhost:3000')
+
 while counter < 288:
 
     counter = counter + 1
@@ -58,13 +76,9 @@ while counter < 288:
 
     TimeStamp = pst24.isoformat()
     Power = is_time_between(pst24.time())
-    data.append({
+    sio.emit('my message', {
         'TimeStamp': TimeStamp,
         'Power': Power
     })
 
-realTimeData()
-
-url = 'http://localhost:3000/api/murb/oldData'
-requests.post(url, json = data)
 
