@@ -76,7 +76,7 @@ while counter < 288:
 
     TimeStamp = pst24.isoformat()
     Power = is_time_between(pst24.time())
-    sio.emit('my message', {
+    sio.emit('Old Murb Power', {
         'TimeStamp': TimeStamp,
         'Power': Power
     })
