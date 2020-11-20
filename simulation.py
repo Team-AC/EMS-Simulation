@@ -56,29 +56,33 @@ def disconnect():
 
 
 def realTimeData():
-    threading.Timer(300.0, realTimeData).start()
+    threading.Timer(900.0, realTimeData).start()
 
     TimeStamp = datetime.now().isoformat()
     Power = is_time_between(datetime.now().time())
 
-    url = 'http://localhost:3000/api/murb/newData'
-    res = requests.post(url, json = {'TimeStamp': TimeStamp, "Power": Power})
-    print("Response: ", res)
+    sio.emit('New Murb Power', {
+        'TimeStamp': TimeStamp,
+        'Power': Power
+    })
 
 data = []
 
 sio.connect('http://localhost:3000')
 
-while counter < 288:
+realTimeData()
+
+while counter < 96:
 
     counter = counter + 1
-    pst24 = pst24 + timedelta(0, 300)
+    pst24 = pst24 + timedelta(0, 900)
 
     TimeStamp = pst24.isoformat()
     Power = is_time_between(pst24.time())
     sio.emit('Old Murb Power', {
         'TimeStamp': TimeStamp,
         'Power': Power
-    })
+    }) 
+
 
 
