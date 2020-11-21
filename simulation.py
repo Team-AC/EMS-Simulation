@@ -54,6 +54,21 @@ def connect_error():
 def disconnect():
     print("I'm disconnected!")
 
+@sio.on('Old Murb Power Next')
+def send_old_data():
+    global counter
+    global pst24
+    global power
+    if counter < 288:
+        counter = counter + 1
+        pst24 = pst24 + timedelta(0, 300)
+
+        TimeStamp = pst24.isoformat()
+        Power = is_time_between(pst24.time())
+        sio.emit('Old Murb Power', {
+            'TimeStamp': TimeStamp,
+            'Power': Power
+        })
 
 def realTimeData():
     threading.Timer(300.0, realTimeData).start()
@@ -69,16 +84,5 @@ data = []
 
 sio.connect('http://localhost:3000')
 
-while counter < 288:
-
-    counter = counter + 1
-    pst24 = pst24 + timedelta(0, 300)
-
-    TimeStamp = pst24.isoformat()
-    Power = is_time_between(pst24.time())
-    sio.emit('Old Murb Power', {
-        'TimeStamp': TimeStamp,
-        'Power': Power
-    })
-
+send_old_data()
 
