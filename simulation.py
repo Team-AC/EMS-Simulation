@@ -76,13 +76,15 @@ def realTimeData():
     TimeStamp = datetime.now().isoformat()
     Power = is_time_between(datetime.now().time())
 
-    url = 'http://localhost:3000/api/murb/newData'
-    res = requests.post(url, json = {'TimeStamp': TimeStamp, "Power": Power})
-    print("Response: ", res)
+    sio.emit('New Murb Power', {
+        'TimeStamp': TimeStamp,
+        'Power': Power
+    })
 
 data = []
 
 sio.connect('http://localhost:3000')
 
 send_old_data()
+realTimeData()
 
