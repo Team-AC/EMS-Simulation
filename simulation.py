@@ -59,9 +59,9 @@ def send_old_data():
     global counter
     global pst24
     global power
-    if counter < 288:
+    if counter < (4 * 24):
         counter = counter + 1
-        pst24 = pst24 + timedelta(0, 300)
+        pst24 = pst24 + timedelta(0, 900)
 
         TimeStamp = pst24.isoformat()
         Power = is_time_between(pst24.time())
@@ -71,7 +71,7 @@ def send_old_data():
         })
 
 def realTimeData():
-    threading.Timer(300.0, realTimeData).start()
+    threading.Timer(900.0, realTimeData).start()
 
     TimeStamp = datetime.now().isoformat()
     Power = is_time_between(datetime.now().time())
