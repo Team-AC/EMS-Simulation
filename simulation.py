@@ -54,12 +54,12 @@ def connect_error():
 def disconnect():
     print("I'm disconnected!")
 
-@sio.on('Old Murb Power Next')
-def send_old_data():
+@sio.on('Generate Murb Power - Past Day')
+def send_past_day():
     global counter
     global pst24
     global power
-    if counter < (4 * 24):
+    while counter < (4 * 24):
         counter = counter + 1
         pst24 = pst24 + timedelta(0, 900)
 
@@ -69,6 +69,10 @@ def send_old_data():
             'TimeStamp': TimeStamp,
             'Power': Power
         })
+
+@sio.on('Pre - Generate Murb Power - Past Day')
+def pre_send_past_day():
+    print("Received")
 
 def realTimeData():
     threading.Timer(900.0, realTimeData).start()
@@ -85,6 +89,7 @@ data = []
 
 sio.connect('http://localhost:3000')
 
-send_old_data()
-realTimeData()
+# send_old_data()
+# realTimeData()
 
+sio.wait()
