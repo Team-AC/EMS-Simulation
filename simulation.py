@@ -54,7 +54,9 @@ def connect_error():
 def disconnect():
     print("I'm disconnected!")
 
-@sio.on('Generate Murb Power - Past Day')
+
+
+@sio.on('Generate Murb Power')
 def send_past_day():
     global counter
     global pst24
@@ -70,7 +72,7 @@ def send_past_day():
             'Power': Power
         })
 
-@sio.on('Pre - Generate Murb Power - Past Day')
+@sio.on('Pre - Generate Murb Power')
 def pre_send_past_day():
     print("Received")
 
