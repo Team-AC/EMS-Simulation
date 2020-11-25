@@ -8,8 +8,7 @@ import socketio
 sio = socketio.Client()
 
 my_date = datetime.now()
-yesterday = datetime.now()-timedelta(1)
-pst24 = yesterday
+
 counter = 0
 power = 0
 
@@ -54,19 +53,31 @@ def connect_error():
 def disconnect():
     print("I'm disconnected!")
 
+dict_time_jump = {
+    "pastDay": 4*24,
+    "pastWeek": 4*24*7,
+    "pastMonth": 4*24*30,
+    "pastYear": 4*24*365
+}
 
+dict_time_delta = {
+    "pastDay": 1,
+    "pastWeek": 1*7,
+    "pastMonth": 1*30,
+    "pastYear": 1*365 
+}
 
 @sio.on('Generate Murb Power')
-def send_past_day():
+def send_past_day(interval):
     global counter
-    global pst24
     global power
-    while counter < (4 * 24):
-        counter = counter + 1
-        pst24 = pst24 + timedelta(0, 900)
+    interval_start = datetime.now()-timedelta(dict_time_delta[interval])
 
-        TimeStamp = pst24.isoformat()
-        Power = is_time_between(pst24.time())
+    while counter < (dict_time_jump[interval]):
+        counter = counter + 1
+        interval_start = interval_start + timedelta(0, 900)
+        TimeStamp = interval_start.isoformat()
+        Power = is_time_between(interval_start.time())
         sio.emit('Old Murb Power', {
             'TimeStamp': TimeStamp,
             'Power': Power
