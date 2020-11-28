@@ -88,21 +88,27 @@ def pre_send_past_day():
     print("Received")
 
 def realTimeData():
-    threading.Timer(900.0, realTimeData).start()
-
+    global a
+    a = threading.Timer(3.0, realTimeData)
+    a.start()
     TimeStamp = datetime.now().isoformat()
     Power = is_time_between(datetime.now().time())
+    print(Power)
 
-    sio.emit('New Murb Power', {
-        'TimeStamp': TimeStamp,
-        'Power': Power
-    })
+    # sio.emit('New Murb Power', {
+    #     'TimeStamp': TimeStamp,
+    #     'Power': Power
+    # })
+
+@sio.on('Stop Murb Power')
+def stop_murb_data():
+    a.cancel()
 
 data = []
 
 sio.connect('http://localhost:3000')
 
 # send_old_data()
-# realTimeData()
+realTimeData()
 
 sio.wait()
