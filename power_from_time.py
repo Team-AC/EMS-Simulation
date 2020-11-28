@@ -1,3 +1,6 @@
+import datetime
+import random
+
 timedict = {
   "0": 10,
   "1": 14,
@@ -25,16 +28,23 @@ timedict = {
 }
 
 monthdict = {
-  "January": 4,
-  "February": 6,
-  "March": 3,
-  "April": 2,
-  "May": 8,
-  "June": 9,
-  "July": 11,
-  "August": 13,
-  "September": 6,
-  "October": 4,
-  "November": 5,
-  "December": 3
+  "1": 4,
+  "2": 6,
+  "3": 3,
+  "4": 2,
+  "5": 8,
+  "6": 9,
+  "7": 11,
+  "8": 13,
+  "9": 6,
+  "10": 4,
+  "11": 5,
+  "12": 3,
 }
+
+def power_from_time(time):  
+
+  M = monthdict[str(time.month)]  
+
+  H = timedict[str(time.hour)]
+  return M + H + random.random()
