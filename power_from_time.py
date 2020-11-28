@@ -1,7 +1,7 @@
 import datetime
 import random
 
-timedict = {
+hour_dict = {
   "0": 10,
   "1": 14,
   "2": 16,
@@ -27,7 +27,7 @@ timedict = {
   "23": 12
 }
 
-monthdict = {
+month_dict = {
   "1": 4,
   "2": 6,
   "3": 3,
@@ -44,7 +44,7 @@ monthdict = {
 
 def power_from_time(time):  
 
-  M = monthdict[str(time.month)]  
+  M = month_dict[str(time.month)]  
 
-  H = timedict[str(time.hour)]
+  H = hour_dict[str(time.hour)]
   return M + H + random.random()
