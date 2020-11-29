@@ -93,7 +93,7 @@ def realTimeData():
     start_time.start()
     TimeStamp = datetime.now().isoformat()
     Power = is_time_between(datetime.now().time())
-        sio.emit('New Murb Power', {
+    sio.emit('New Murb Power', {
         'TimeStamp': TimeStamp,
         'Power': Power
     })
