@@ -92,10 +92,13 @@ def send_past_day(interval):
         interval_start = interval_start + timedelta(0, 900)
         TimeStamp = interval_start.isoformat()
         Power = is_time_between(interval_start.time())
+
         sio.emit('Old Murb Power', {
             'TimeStamp': TimeStamp,
             'Power': Power
         })
+    
+    counter = 0
 
 @sio.on('Pre - Generate Murb Power')
 def pre_send_past_day():
@@ -104,13 +107,12 @@ def pre_send_past_day():
 
 @sio.on('Stop Murb Power')
 def stop_murb_data():
-    timer.cancel()
+    global timer
+    if 'timer' in globals():
+        timer.cancel()
 
 data = []
 
 sio.connect('http://localhost:3000')
-
-# send_old_data()
-
 
 sio.wait()
