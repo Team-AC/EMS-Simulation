@@ -42,7 +42,7 @@ def realTimeData():
     timer = threading.Timer(900.0, realTimeData)
     timer.start()
     TimeStamp = datetime.now().isoformat()
-    Power = power_from_time_model.power_from_time_model(datetime.now().time())
+    Power = power_from_time_model.power_from_time(datetime.now().time())
     sio.emit('New Murb Power', {
         'TimeStamp': TimeStamp,
         'Power': Power
@@ -61,7 +61,7 @@ def send_past_day(interval):
         counter = counter + 1
         interval_start = interval_start + timedelta(0, 900)
         TimeStamp = interval_start.isoformat()
-        Power = power_from_time_model.power_from_time_model(interval_start.time())
+        Power = power_from_time_model.power_from_time(interval_start.time())
 
         sio.emit('Old Murb Power', {
             'TimeStamp': TimeStamp,
