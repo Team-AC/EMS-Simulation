@@ -124,6 +124,6 @@ def stop_murb_data():
 
 data = []
 
-sio.connect('http://localhost:3002')
+sio.connect('http://localhost:3000')
 
 sio.wait()
