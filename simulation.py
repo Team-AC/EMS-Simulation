@@ -24,10 +24,10 @@ def disconnect():
     print("I'm disconnected!")
 
 dict_time_jump = {
-    "pastDay": 4*24,
-    "pastWeek": 4*24*7,
-    "pastMonth": 4*24*30,
-    "pastYear": 4*24*365
+    "pastDay": (4*24)-1,
+    "pastWeek": (4*24*7)-1,
+    "pastMonth": (4*24*30)-1,
+    "pastYear": (4*24*365)-1
 }
 
 dict_time_delta = {
@@ -48,7 +48,6 @@ def realTimeData():
         'Power': Power
     })
 
-
 @sio.on('Generate Murb Power')
 def send_past_day(interval):
     global counter
@@ -56,12 +55,11 @@ def send_past_day(interval):
     interval_start = datetime.now()-timedelta(dict_time_delta[interval])
 
     realTimeData()
-    
     while counter < (dict_time_jump[interval]):
         counter = counter + 1
         interval_start = interval_start + timedelta(0, 900)
         TimeStamp = interval_start.isoformat()
-        Power = power_from_time_model.power_from_time(interval_start)
+        Power = power_from_time_model.power_from_time(interval_start.time())
 
         sio.emit('Old Murb Power', {
             'TimeStamp': TimeStamp,
@@ -69,6 +67,20 @@ def send_past_day(interval):
         })
     
     counter = 0
+
+@sio.on('Status Check')
+def status_check():
+    if 'timer' in globals():
+        real_time_data_status = timer.is_alive()
+    else:
+        real_time_data_status = False
+
+     
+    return { 
+        'real_time_data_status': real_time_data_status,
+        'data_generate_config': dict_time_jump
+    }
+
 
 @sio.on('Pre - Generate Murb Power')
 def pre_send_past_day():
