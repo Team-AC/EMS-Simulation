@@ -98,7 +98,7 @@ def send_past_day(interval):
 
         # Sleep every 100th iteration to prevent server from getting overloaded
         if ((counter % 100) == 1):
-            sleep(0.5)
+            sleep(3)
     
     counter = 0
 
