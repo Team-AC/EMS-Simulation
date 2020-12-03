@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, time
+from time import sleep
 import threading
 import random
 import requests
@@ -94,6 +95,10 @@ def send_past_day(interval):
             'TimeStamp': TimeStamp,
             'Power': Power
         })
+
+        # Sleep every 100th iteration to prevent server from getting overloaded
+        if ((counter % 100) == 1):
+            sleep(0.5)
     
     counter = 0
 
