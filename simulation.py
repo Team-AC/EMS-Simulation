@@ -7,7 +7,7 @@ import socketio
 
 sio = socketio.Client()
 
-my_date = datetime.now()
+my_date = datetime.utcnow()
 
 counter = 0
 power = 0
@@ -71,8 +71,8 @@ def realTimeData():
     global timer
     timer = threading.Timer(900.0, realTimeData)
     timer.start()
-    TimeStamp = datetime.now().isoformat()
-    Power = is_time_between(datetime.now().time())
+    TimeStamp = datetime.utcnow().isoformat()
+    Power = is_time_between(datetime.utcnow().time())
     sio.emit('New Murb Power', {
         'TimeStamp': TimeStamp,
         'Power': Power
@@ -82,7 +82,7 @@ def realTimeData():
 def send_past_day(interval):
     global counter
     global power
-    interval_start = datetime.now()-timedelta(dict_time_delta[interval])
+    interval_start = datetime.utcnow()-timedelta(dict_time_delta[interval])
 
     realTimeData()
     while counter < (dict_time_jump[interval]):
