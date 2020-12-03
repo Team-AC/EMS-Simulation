@@ -2,9 +2,8 @@ from datetime import datetime, timedelta, time
 from time import sleep
 import threading
 import random
-import requests
-import json
 import socketio
+import power_from_time_model
 
 sio = socketio.Client()
 
@@ -12,35 +11,6 @@ my_date = datetime.utcnow()
 
 counter = 0
 power = 0
-
-def is_time_between(check_time):
-    power = 0
-
-    if (check_time > time(21, 0, 0)) and (check_time < time(23, 59, 59)):
-        power = 51 + (53 - 51)*random.random()
-        return power
-
-    if (check_time > time(16, 0, 0)) and (check_time < time(21, 0, 0)):
-        power = 56 + (58 - 56)*random.random()
-        return power
-
-    if (check_time > time(13, 0, 0)) and (check_time < time(16, 0, 0)):
-        power = 60 + (63 - 60)*random.random()
-        return power
-
-    if (check_time > time(9, 0, 0)) and (check_time < time(13, 0, 0)):
-        power = 56 + (58 - 56)*random.random()
-        return power
-
-    if (check_time > time(5, 0, 0)) and (check_time < time(9, 0, 0)):
-        power = 53 + (55 - 53)*random.random()
-        return power
-
-    if (check_time > time(0, 0, 0)) and (check_time < time(5, 0, 0)):
-        power = 48 + (51 - 48)*random.random()
-        return power
-
-    return 0
 
 @sio.event
 def connect():
@@ -73,7 +43,7 @@ def realTimeData():
     timer = threading.Timer(900.0, realTimeData)
     timer.start()
     TimeStamp = datetime.utcnow().isoformat()
-    Power = is_time_between(datetime.utcnow().time())
+    Power = power_from_time_model.power_from_time(datetime.utcnow())
     sio.emit('New Murb Power', {
         'TimeStamp': TimeStamp,
         'Power': Power
@@ -90,7 +60,8 @@ def send_past_day(interval):
         counter = counter + 1
         interval_start = interval_start + timedelta(0, 900)
         TimeStamp = interval_start.isoformat()
-        Power = is_time_between(interval_start.time())
+        Power = power_from_time_model.power_from_time(interval_start)
+
         sio.emit('Old Murb Power', {
             'TimeStamp': TimeStamp,
             'Power': Power
