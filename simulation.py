@@ -59,7 +59,7 @@ def send_past_day(interval):
         counter = counter + 1
         interval_start = interval_start + timedelta(0, 900)
         TimeStamp = interval_start.isoformat()
-        Power = power_from_time_model.power_from_time(interval_start.time())
+        Power = power_from_time_model.power_from_time(interval_start)
 
         sio.emit('Old Murb Power', {
             'TimeStamp': TimeStamp,

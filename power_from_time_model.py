@@ -1,31 +1,41 @@
 import datetime
 import random
+import math 
+from random import gauss
+
+mean = 0
+variance = 10
+
+
+week_number = datetime.datetime.today().weekday()
+
+
 
 hour_dict = {
   "0": 232,
-  "1": 211,
+  "1": 219,
   "2": 205,
   "3": 205,
   "4": 203,
-  "5": 240,
-  "6": 252,
-  "7": 262,
-  "8": 270,
-  "9": 274,
+  "5": 200,
+  "6": 222,
+  "7": 252,
+  "8": 266,
+  "9": 271,
   "10": 279,
-  "11": 286,
-  "12": 287,
-  "13": 287,
-  "14": 284,
-  "15": 287,
-  "16": 299,
-  "17": 322,
-  "18": 342,
-  "19": 343,
-  "20": 333,
-  "21": 312,
-  "22": 282,
-  "23": 248
+  "11": 290,
+  "12": 298,
+  "13": 298,
+  "14": 291,
+  "15": 297,
+  "16": 302,
+  "17": 325,
+  "18": 352,
+  "19": 354,
+  "20": 340,
+  "21": 324,
+  "22": 302,
+  "23": 262
 }
 
 month_dict = {
@@ -43,9 +53,17 @@ month_dict = {
   "12": 82,
 }
 
+#Fucntion Requires datetime object
 def power_from_time(time):  
 
   M = month_dict[str(time.month)]  
 
   H = hour_dict[str(time.hour)]
-  return M + H + random.random()
+
+  if week_number < 5:
+    return M + H + 20*random.random() - 20*random.random()
+  else:
+    return M + H + 20*random.random() - 20*random.random() + 15
+
+  
+  
