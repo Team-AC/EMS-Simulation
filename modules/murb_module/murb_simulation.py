@@ -40,14 +40,14 @@ def murb_simulation_init(sio):
   def send_past_day(interval):
     global counter
     global power
-    interval_start = datetime.utcnow()-timedelta(dict_time_delta[interval])
+    interval_datetime = datetime.utcnow()-timedelta(0, 900)
 
     realTimeData()
     while counter < (dict_time_jump[interval]):
         counter = counter + 1
-        interval_start = interval_start + timedelta(0, 900)
-        TimeStamp = interval_start.isoformat()
-        Power = power_from_time(interval_start)
+        interval_datetime = interval_datetime - timedelta(0, 900)
+        TimeStamp = interval_datetime.isoformat()
+        Power = power_from_time(interval_datetime)
 
         sio.emit('Old Murb Power', {
             'TimeStamp': TimeStamp,
