@@ -23,7 +23,9 @@ dict_time_delta = {
     "pastYear": 1*365 
 }
 
-def realTimeData():
+def murb_simulation_init(sio):
+
+  def realTimeData():
     global timer
     timer = threading.Timer(900.0, realTimeData)
     timer.start()
@@ -34,30 +36,29 @@ def realTimeData():
         'Power': Power
     })
 
-def murb_simulation_init(sio):
   @sio.on('Generate Murb Power')
   def send_past_day(interval):
-      global counter
-      global power
-      interval_start = datetime.utcnow()-timedelta(dict_time_delta[interval])
+    global counter
+    global power
+    interval_start = datetime.utcnow()-timedelta(dict_time_delta[interval])
 
-      realTimeData()
-      while counter < (dict_time_jump[interval]):
-          counter = counter + 1
-          interval_start = interval_start + timedelta(0, 900)
-          TimeStamp = interval_start.isoformat()
-          Power = power_from_time(interval_start)
+    realTimeData()
+    while counter < (dict_time_jump[interval]):
+        counter = counter + 1
+        interval_start = interval_start + timedelta(0, 900)
+        TimeStamp = interval_start.isoformat()
+        Power = power_from_time(interval_start)
 
-          sio.emit('Old Murb Power', {
-              'TimeStamp': TimeStamp,
-              'Power': Power
-          })
+        sio.emit('Old Murb Power', {
+            'TimeStamp': TimeStamp,
+            'Power': Power
+        })
 
-          # Sleep every 100th iteration to prevent server from getting overloaded
-          if ((counter % 100) == 1):
-              sleep(3)
-      
-      counter = 0
+        # Sleep every 100th iteration to prevent server from getting overloaded
+        if ((counter % 100) == 1):
+            sleep(3)
+    
+    counter = 0
 
   @sio.on('Status Check')
   def status_check():
