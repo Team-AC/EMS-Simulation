@@ -18,10 +18,11 @@ def disconnect():
     print("I'm disconnected!")
 
 # Initialize the simulations
+
+sio.connect('http://localhost:3000')
+
 murb_simulation_init(sio)
 ev_simulation_init(sio)
 bess_simulation_init(sio)
-
-sio.connect('http://localhost:3000')
 
 sio.wait()
