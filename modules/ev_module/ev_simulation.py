@@ -61,5 +61,8 @@ def ev_simulation_init(sio_passed_in = None):
 
     sio.sleep(1)
 
-    check_ev()
-    Timer(5, ev_simulation_init).start()
+    def real_time_data():
+        check_ev()
+        Timer(30, check_ev).start()
+
+    real_time_data()
