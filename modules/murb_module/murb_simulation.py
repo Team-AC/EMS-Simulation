@@ -55,49 +55,30 @@ def murb_simulation_init(sio):
                 'Power': Power
             })
 
-        @sio.on('Generate Murb Power')
-        def send_past_day(interval):
-            global counter
-            global power
-            interval_start = datetime.utcnow(
-            )-timedelta(dict_time_delta[interval])
+            # Sleep every 100th iteration to prevent server from getting overloaded
+            if ((counter % 100) == 1):
+                sleep(3)
 
-            realTimeData()
-            while counter < (dict_time_jump[interval]):
-                counter = counter + 1
-                interval_start = interval_start + timedelta(0, 900)
-                TimeStamp = interval_start.isoformat()
-                Power = power_from_time(interval_start)
+        counter = 0
 
-                sio.emit('Old Murb Power', {
-                    'TimeStamp': TimeStamp,
-                    'Power': Power
-                })
+    @sio.on('Status Check')
+    def status_check():
+        if 'timer' in globals():
+            real_time_data_status = timer.is_alive()
+        else:
+            real_time_data_status = False
 
-                # Sleep every 100th iteration to prevent server from getting overloaded
-                if ((counter % 100) == 1):
-                    sleep(3)
+        return {
+            'real_time_data_status': real_time_data_status,
+            'data_generate_config': dict_time_jump
+        }
 
-            counter = 0
+    @sio.on('Pre - Generate Murb Power')
+    def pre_send_past_day():
+        print("Received")
 
-        @sio.on('Status Check')
-        def status_check():
-            if 'timer' in globals():
-                real_time_data_status = timer.is_alive()
-            else:
-                real_time_data_status = False
-
-            return {
-                'real_time_data_status': real_time_data_status,
-                'data_generate_config': dict_time_jump
-            }
-
-        @sio.on('Pre - Generate Murb Power')
-        def pre_send_past_day():
-            print("Received")
-
-        @sio.on('Stop Murb Power')
-        def stop_murb_data():
-            global timer
-            if 'timer' in globals():
-                timer.cancel()
+    @sio.on('Stop Murb Power')
+    def stop_murb_data():
+        global timer
+        if 'timer' in globals():
+            timer.cancel()
