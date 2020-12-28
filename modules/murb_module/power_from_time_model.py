@@ -1,7 +1,5 @@
 import datetime
 import random
-import math
-from random import gauss
 
 mean = 0
 variance = 10
@@ -55,7 +53,7 @@ month_dict = {
 # Fucntion Requires datetime object
 
 
-def power_from_time(time):
+def power_from_time(time, parameters):
 
     M = month_dict[str(time.month)]
 
