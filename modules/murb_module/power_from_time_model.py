@@ -3,12 +3,14 @@ import random
 import pandas as pd
 import numpy as np
 from joblib import load
+import os
+
+# Generate relative path
+dirname = os.path.dirname(__file__)
+filename = os.path.join(dirname, '../../ml_models/outputs/murb_power_regression.joblib')
 
 # Load Model
-loaded_clf =  load('ml_models\outputs\murb_power_regression.joblib')
-
-# Define X_test
-
+loaded_clf = load(filename)
 
 # Fucntion Requires datetime object
 
