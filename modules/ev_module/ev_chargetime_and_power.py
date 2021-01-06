@@ -13,7 +13,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
     if ev_wanting_charge == 1 and ev_charger_level == 2:
         if chance_ev_battery_size < 0.2:
             ev_battery_end_percentage = randrange(ev_battery_start_percentage, 100, 1) # NEED TO CHANGE FOR BETTER ACCURACY
-            ev_battery_small = 10 #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
+            ev_battery_small = randrange(17,49,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
             ev_charger_lvl_2_rate = 7 #RATE for lvl 2
             
             #algo for power and time
@@ -24,7 +24,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             
         elif ((chance_ev_battery_size >= 0.2) and (chance_ev_battery_size < 0.5)):
             ev_battery_end_percentage = randrange(ev_battery_start_percentage,100,1) # this will be the leaving battery percentage 
-            ev_battery_med = 50 #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
+            ev_battery_med = randrange(50,84,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
             ev_charger_lvl_2_rate = 7 #RATE for lvl 2
             
             #algo for power and time
@@ -34,7 +34,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             return charge_time, power, ev_charger_num, ev_charger_level
         else:
             ev_battery_end_percentage = randrange(ev_battery_start_percentage,100,1) # this will be the leaving battery percentage 
-            ev_battery_large = 100 #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
+            ev_battery_large = randrange(85,200,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
             ev_charger_lvl_2_rate = 7 #RATE for lvl 2
 
             #algo for power and time
@@ -47,7 +47,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
        
         if chance_ev_battery_size < 0.2:
             ev_battery_end_percentage = randrange(ev_battery_start_percentage,100,1) # NEED TO CHANGE FOR BETTER ACCURACY
-            ev_battery_small = 10 #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
+            ev_battery_small = randrange(17,49,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
             ev_charger_lvl_3_rate = 50 #RATE for lvl 3
             
             #algo for power and time
@@ -58,7 +58,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             
         elif ((chance_ev_battery_size >= 0.2) and (chance_ev_battery_size < 0.5)):
             ev_battery_end_percentage = randrange(ev_battery_start_percentage,100,1) # this will be the leaving battery percentage 
-            ev_battery_med = 50 #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
+            ev_battery_med = randrange(50,84,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
             ev_charger_lvl_3_rate = 50 #RATE for lvl 3
             
             #algo for power and time
@@ -69,7 +69,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             
         else:
             ev_battery_end_percentage = randrange(ev_battery_start_percentage,100,1) # this will be the leaving battery percentage 
-            ev_battery_large = 100 #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
+            ev_battery_large = randrange(85,200,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
             ev_charger_lvl_3_rate = 50 #RATE for lvl 3
 
             #algo for power and time
