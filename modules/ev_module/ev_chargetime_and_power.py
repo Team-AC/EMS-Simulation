@@ -4,6 +4,7 @@ import random
 from random import randrange
 import numpy as np
 
+
 def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_charger_level, ev_charger_num):
     probability_of_evbattery_small = 0.2 # MIGHT CHANGE FOR ACCURACY
     probability_of_evbattery_med = 0.3

@@ -11,7 +11,7 @@ def check_ev_coming_in_to_charge(ev_start_time):
     # this the chance that ev comes in and wants to charge
 
     if ev_start_time_hour >= 0 and ev_start_time_hour < 7: # 12am - 6am
-        probability_of_ev_entered = 0.2
+        probability_of_ev_entered = 0.95
         probability_of_ev_charging = 0.85
         if (chance_ev_wants_charge <= probability_of_ev_charging*probability_of_ev_entered):     
             ev_wanting_charge = True
