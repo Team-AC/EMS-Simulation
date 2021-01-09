@@ -1,34 +1,23 @@
-from datetime import datetime
+from datetime import datetime,timedelta
 from threading import Timer
 
-def end_charging(charge_time, power):
-    global sio
+from modules.ev_module.real_time_data import real_time_data_start
 
-    sio.emit('New EV Power', {
-        'TimeStamp': datetime.utcnow().isoformat(),
-        'Power': power,
-        'ChargeTime': charge_time,
-    })
-
-def start_charging(charge_time, power):
-    Timer(charge_time, end_charging, (charge_time, power)).start()
-
-def check_ev():
-    ev_entered = True
-    charge_time = 15
-    power = 30
-
-    if (ev_entered):
-        start_charging(charge_time, power)
-
-def ev_simulation_init(sio_passed_in):
-    global sio
-    sio = sio_passed_in
-
+def ev_simulation_init(sio):
     sio.sleep(1)
 
-    def real_time_data():
-        check_ev()
-        Timer(30, check_ev).start()
+    real_time_data_start(sio)
+    
+    """ @sio.on('Generate Ev')
+    def generate_ev(paramters_dict):
+        lvl_2 = [0 for x in range(int(paramters_dict["num_ev_level_2"])]
+        lvl_3 = [0 for x in range(int(paramters_dict["num_ev_level_3"])]
+        real_time_data(pramters_dict, sio) """
 
-    real_time_data()
+    def generate_past_ev_data():
+        ev_current_time = datetime.utcnow()
+        ev_start_time_counter = ev_start_time = datetime.utcnow() - timedelta(hours=24) 
+        
+        
+            
+    generate_past_ev_data() 
