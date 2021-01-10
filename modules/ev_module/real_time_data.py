@@ -21,11 +21,13 @@ def end_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_start_
             'TimeStamp': ev_time_stamp.isoformat(),
             'Power': power,
             'ChargeTime': charge_time,
+            'EvChargerNumber': ev_charger_num,
+            'EvChargerType': ev_charger_level
         })
 #Real Time Data
 def start_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use, lvl_2, lvl_3):
     charge_time_in_sec = charge_time*3600
-    Timer(10, end_charging, (charge_time, power,ev_charger_num, ev_charger_level, ev_start_time, in_use, lvl_2, lvl_3)).start()
+    Timer(charge_time_in_sec, end_charging, (charge_time, power,ev_charger_num, ev_charger_level, ev_start_time, in_use, lvl_2, lvl_3)).start()
 
 
 
