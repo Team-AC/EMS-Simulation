@@ -1,7 +1,6 @@
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta
 from time import sleep
 import threading
-import random
 from modules.murb_module.power_from_time_model import power_from_time
 
 my_date = datetime.utcnow()
@@ -26,47 +25,29 @@ dict_time_delta = {
 
 def murb_simulation_init(sio):
 
-  def realTimeData():
-    global timer
-    timer = threading.Timer(900.0, realTimeData)
-    timer.start()
-    TimeStamp = datetime.utcnow().isoformat()
-    Power = power_from_time(datetime.utcnow())
-    sio.emit('New Murb Power', {
-        'TimeStamp': TimeStamp,
-        'Power': Power
-    })
-
-  @sio.on('Generate Murb Power')
-  def send_past_day(interval):
-    global counter
-    global power
-    interval_datetime = datetime.utcnow()-timedelta(0, 900)
-
-    realTimeData()
-    while counter < (dict_time_jump[interval]):
-        counter = counter + 1
-        interval_datetime = interval_datetime - timedelta(0, 900)
-        TimeStamp = interval_datetime.isoformat()
-        Power = power_from_time(interval_datetime)
-
-        sio.emit('Old Murb Power', {
+    def realTimeData(parameters):
+        global timer
+        timer = threading.Timer(900.0, realTimeData)
+        timer.start()
+        TimeStamp = datetime.utcnow().isoformat()
+        Power = power_from_time(datetime.utcnow(), parameters)
+        sio.emit('New Murb Power', {
             'TimeStamp': TimeStamp,
             'Power': Power
         })
 
     @sio.on('Generate Murb Power')
-    def send_past_day(interval):
+    def generate_murb_power(interval, parameters):
         global counter
         global power
-        interval_start = datetime.utcnow()-timedelta(dict_time_delta[interval])
+        interval_datetime = datetime.utcnow()-timedelta(0, 900)
 
-        realTimeData()
+        realTimeData(parameters)
         while counter < (dict_time_jump[interval]):
             counter = counter + 1
-            interval_start = interval_start + timedelta(0, 900)
-            TimeStamp = interval_start.isoformat()
-            Power = power_from_time(interval_start)
+            interval_datetime = interval_datetime - timedelta(0, 900)
+            TimeStamp = interval_datetime.isoformat()
+            Power = power_from_time(interval_datetime, parameters)
 
             sio.emit('Old Murb Power', {
                 'TimeStamp': TimeStamp,
@@ -100,4 +81,3 @@ def murb_simulation_init(sio):
         global timer
         if 'timer' in globals():
             timer.cancel()
-            

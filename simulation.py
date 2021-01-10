@@ -22,7 +22,7 @@ def disconnect():
 sio.connect('http://localhost:3000')
 
 murb_simulation_init(sio)
-ev_simulation_init(sio)
+# ev_simulation_init(sio)
 bess_simulation_init(sio)
 
 sio.wait()
