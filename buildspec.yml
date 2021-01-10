@@ -1,0 +1,20 @@
+version: 0.2
+
+env:
+  variables:
+    ECR_URI: 479660213652.dkr.ecr.us-east-1.amazonaws.com/ems-sim
+    ACC: 479660213652.dkr.ecr.us-east-1.amazonaws.com
+    REGION: us-east-1
+    TAG: latest
+
+phases:
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACC
+  build:
+    commands:
+      - docker build -t $ECR_URI:$TAG .
+      - docker tag $ECR_URI:$TAG $ECR_URI:$TAG
+  post_build:
+    commands:
+      - docker push $ECR_URI:$TAG

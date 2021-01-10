@@ -16,7 +16,7 @@ def end_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_start_
         print("charging done and it good to use again")
         
         ev_time_stamp = ev_start_time + timedelta(seconds=charge_time*3600)
-        
+
         sio.emit('New EV Power', {
             'TimeStamp': ev_time_stamp.isoformat(),
             'Power': power,

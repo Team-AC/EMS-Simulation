@@ -1,4 +1,5 @@
 import socketio
+import os
 from modules.murb_module.murb_simulation import murb_simulation_init 
 from modules.ev_module.ev_simulation import ev_simulation_init 
 from modules.bess_module.bess_simulation import bess_simulation_init 
@@ -17,12 +18,14 @@ def connect_error():
 def disconnect():
     print("I'm disconnected!")
 
-# Initialize the simulations
-
-sio.connect('http://localhost:3000')
+# Connect to port 80 in production and 3000 in development
+if ('PROD' in os.environ) and (int(os.environ['PROD']) == 1):
+    sio.connect('http://localhost:80')
+else:
+    sio.connect('http://localhost:3000')
 
 murb_simulation_init(sio)
-# ev_simulation_init(sio)
+ev_simulation_init(sio)
 bess_simulation_init(sio)
 
 sio.wait()
