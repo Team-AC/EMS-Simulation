@@ -1,5 +1,5 @@
 import random
-from random import randrange
+from random import randrange, gauss
 from datetime import time, datetime
 
 
@@ -14,7 +14,7 @@ def check_ev_coming_in_to_charge(ev_start_time):
         probability_of_ev_charging = 0.85
         if (chance_ev_wants_charge <= probability_of_ev_charging*probability_of_ev_entered):     
             ev_wanting_charge = True
-            ev_battery_start_percentage = random.randrange(0,40,1) # NEED TO CHANGE FOR BETTER ACCURACY
+            ev_battery_start_percentage = round(gauss(30,15)) # NEED TO CHANGE FOR BETTER ACCURACY
             print('ev wants it b/t 12am - 6am')
             return ev_wanting_charge, ev_battery_start_percentage
 
@@ -28,7 +28,7 @@ def check_ev_coming_in_to_charge(ev_start_time):
         probability_of_ev_charging = 0.85
         if (chance_ev_wants_charge <= probability_of_ev_charging*probability_of_ev_entered):     
             ev_wanting_charge = True
-            ev_battery_start_percentage = random.randrange(0,40,1) # NEED TO CHANGE FOR BETTER ACCURACY
+            ev_battery_start_percentage = round(gauss(30,15))# NEED TO CHANGE FOR BETTER ACCURACY
             print('ev wants it b/t 7am - 12pm')
             return ev_wanting_charge, ev_battery_start_percentage
 
@@ -41,7 +41,7 @@ def check_ev_coming_in_to_charge(ev_start_time):
         probability_of_ev_charging = 0.85
         if (chance_ev_wants_charge <= probability_of_ev_charging*probability_of_ev_entered):     
             ev_wanting_charge = True
-            ev_battery_start_percentage = random.randrange(0,40,1) # NEED TO CHANGE FOR BETTER ACCURACY
+            ev_battery_start_percentage = round(gauss(30,15)) # NEED TO CHANGE FOR BETTER ACCURACY
             print('ev wants it b/t 1pm - 7pm')
             return ev_wanting_charge, ev_battery_start_percentage
 
@@ -54,7 +54,7 @@ def check_ev_coming_in_to_charge(ev_start_time):
         probability_of_ev_charging = 0.85
         if (chance_ev_wants_charge <= probability_of_ev_charging*probability_of_ev_entered):     
             ev_wanting_charge = True
-            ev_battery_start_percentage = random.randrange(0,40,1) # NEED TO CHANGE FOR BETTER ACCURACY
+            ev_battery_start_percentage = round(gauss(30,15)) # NEED TO CHANGE FOR BETTER ACCURACY
             print('ev wants it b/t 8pm - 12am')
             return ev_wanting_charge, ev_battery_start_percentage
 
