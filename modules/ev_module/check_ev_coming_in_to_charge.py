@@ -6,7 +6,6 @@ from datetime import time, datetime
 def check_ev_coming_in_to_charge(ev_start_time):
     ev_start_time_hour = ev_start_time.hour
     # user inputs: number of chargers, 
-    # ASSUMING ONE CHARGER RN
     chance_ev_wants_charge = random.uniform(0, 1)
     # this the chance that ev comes in and wants to charge
 
