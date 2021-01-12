@@ -4,11 +4,11 @@ from modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to
 from modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
 
 ev_charging_queue = []
-dict_time_delta = {
-    "pastDay": 1,
-    "pastWeek": 1*7,
-    "pastMonth": 1*30,
-    "pastYear": 1*365
+dict_interval_hours = {
+    "pastDay": 24,
+    "pastWeek": 24*7,
+    "pastMonth": 24*30,
+    "pastYear": 24*365
 }
 
 #Real Time Data
@@ -19,11 +19,11 @@ def end_charging(charge_time, power, ev_charger_num, ev_charger_level, in_use, l
     if ev_charger_level != 0:
         if ev_charger_level == 2:
             lvl_2[int(ev_charger_num)] = in_use
-            print("lvl 2",lvl_2)
+            #print("lvl 2",lvl_2)
         else:
             lvl_3[int(ev_charger_num)] = in_use
-            print("lvl 3",lvl_3)
-        print("charging done and it good to use again")
+            #print("lvl 3",lvl_3)
+        #print("charging done and it good to use again")
         
         
         ev_time_stamp = historical_current_time 
@@ -44,19 +44,17 @@ def start_charging(charge_time, power, ev_charger_num, ev_charger_level, in_use,
         "finish_charging_time": historical_current_time + timedelta(hours=charge_time),
         "arguments": (charge_time, power, ev_charger_num, ev_charger_level, in_use, lvl_2, lvl_3)
     })
-   
-lvl_2 = [0 for x in range(3)]
-lvl_3 = [0 for x in range(3)]
 
-def historical_data(sio_passed_in): #(paramter_dict, sio)
+def historical_data(interval, paramter_dict, sio_passed_in): #(paramter_dict, sio)
     global sio
     sio = sio_passed_in
-
     global lvl_2
     global lvl_3
     global historical_current_time
     global ev_charging_queue
-    historical_start_time = datetime.utcnow() - timedelta(hours=5)
+    lvl_2 = [0 for x in range(int(paramter_dict['num_ev_level_2']))]
+    lvl_3 = [0 for x in range(int(paramter_dict['num_ev_level_3']))]
+    historical_start_time = datetime.utcnow() - timedelta(hours=dict_interval_hours[interval])
     historical_end_time = datetime.utcnow()
 
     historical_current_time = historical_start_time
