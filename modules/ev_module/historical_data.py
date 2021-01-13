@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 from threading import Timer
 from modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to_charge
 from modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
@@ -54,8 +54,8 @@ def historical_data(interval, paramter_dict, sio_passed_in): #(paramter_dict, si
     global ev_charging_queue
     lvl_2 = [0 for x in range(int(paramter_dict['num_ev_level_2']))]
     lvl_3 = [0 for x in range(int(paramter_dict['num_ev_level_3']))]
-    historical_start_time = datetime.utcnow() - timedelta(hours=dict_interval_hours[interval])
-    historical_end_time = datetime.utcnow()
+    historical_start_time = datetime.now(timezone.utc) - timedelta(hours=dict_interval_hours[interval])
+    historical_end_time = datetime.now(timezone.utc)
 
     historical_current_time = historical_start_time
     time_increment = timedelta(seconds=30)
