@@ -1,9 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from time import sleep
 import threading
 from modules.murb_module.power_from_time_model import power_from_time
 
-my_date = datetime.utcnow()
+my_date = datetime.now(timezone.utc)
 
 counter = 0
 power = 0
@@ -29,8 +29,8 @@ def murb_simulation_init(sio):
         global timer
         timer = threading.Timer(900.0, realTimeData)
         timer.start()
-        TimeStamp = datetime.utcnow().isoformat()
-        Power = power_from_time(datetime.utcnow(), parameters)
+        TimeStamp = datetime.now(timezone.utc).isoformat()
+        Power = power_from_time(datetime.now(timezone.utc), parameters)
         sio.emit('New Murb Power', {
             'TimeStamp': TimeStamp,
             'Power': Power
@@ -40,7 +40,7 @@ def murb_simulation_init(sio):
     def generate_murb_power(interval, parameters):
         global counter
         global power
-        interval_datetime = datetime.utcnow()-timedelta(0, 900)
+        interval_datetime = datetime.now(timezone.utc)-timedelta(0, 900)
 
         realTimeData(parameters)
         while counter < (dict_time_jump[interval]):
