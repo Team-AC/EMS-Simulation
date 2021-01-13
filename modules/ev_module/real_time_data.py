@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
 from threading import Timer
 from modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to_charge
 from modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
@@ -38,7 +38,7 @@ def real_time_data(): #(paramter_dict, sio)
     global lvl_2
     global lvl_3
     
-    ev_start_time = datetime.utcnow()
+    ev_start_time = datetime.now(timezone.utc)
     ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(ev_start_time)
     charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use = logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, ev_start_time, lvl_2, lvl_3)
     start_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use, lvl_2, lvl_3)
