@@ -60,6 +60,7 @@ def logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, ev_st
                 #print(logic_ev_charger_check_return)
                 return charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use_or_not_in_use_level_2
             else:
+                
                 if probability_of_waiting < 0.2:
                     print("waiting")
                     logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, ev_start_time, lvl_2, lvl_3)

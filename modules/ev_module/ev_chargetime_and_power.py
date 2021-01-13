@@ -13,7 +13,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
             ev_battery_end_percentage = randrange(min_charge_percentage, 100, 1) # NEED TO CHANGE FOR BETTER ACCURACY
             ev_battery_small = randrange(17,49,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
-            ev_charger_lvl_2_rate = 7 #RATE for lvl 2 level two 7.7- 22 kw
+            ev_charger_lvl_2_rate = 7 #RATE for lvl 2 level two 7.7- 22 kw #Default Value
             
             #algo for power and time
             power = ((ev_battery_end_percentage - ev_battery_start_percentage)/100)*ev_battery_small
@@ -25,7 +25,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1) # this will be the leaving battery percentage 
             ev_battery_med = randrange(50,84,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
-            ev_charger_lvl_2_rate = 7 #RATE for lvl 2
+            ev_charger_lvl_2_rate = 7 #RATE for lvl 2 #Default Value
             
             #algo for power and time
             power = ((ev_battery_end_percentage - ev_battery_start_percentage)/100)*ev_battery_med
@@ -36,7 +36,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1) # this will be the leaving battery percentage 
             ev_battery_large = randrange(85,200,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
-            ev_charger_lvl_2_rate = 7 #RATE for lvl 2
+            ev_charger_lvl_2_rate = 7 #RATE for lvl 2 #Default Value
 
             #algo for power and time
             power = ((ev_battery_end_percentage - ev_battery_start_percentage)/100)*ev_battery_large
@@ -50,7 +50,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1)
             ev_battery_small = randrange(17,49,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
-            ev_charger_lvl_3_rate = 50 #RATE for lvl 3 25 - 350 kw
+            ev_charger_lvl_3_rate = 50 #RATE for lvl 3 25 - 350 kw #Default Value
             
             #algo for power and time
             power = ((ev_battery_end_percentage - ev_battery_start_percentage)/100)*ev_battery_small
@@ -62,7 +62,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1)
             ev_battery_med = randrange(50,84,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
-            ev_charger_lvl_3_rate = 50 #RATE for lvl 3
+            ev_charger_lvl_3_rate = 50 #RATE for lvl 3 #Default Value
             
             #algo for power and time
             power = ((ev_battery_end_percentage - ev_battery_start_percentage)/100)*ev_battery_med
@@ -74,7 +74,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1)
             ev_battery_large = randrange(85,120,1) #NEED TO FIND AVERAGE BATTERY CAPACITY FOR SIZE
-            ev_charger_lvl_3_rate = 50 #RATE for lvl 3
+            ev_charger_lvl_3_rate = 50 #RATE for lvl 3 #Default Value
 
             #algo for power and time
             power = ((ev_battery_end_percentage - ev_battery_start_percentage)/100)*ev_battery_large
