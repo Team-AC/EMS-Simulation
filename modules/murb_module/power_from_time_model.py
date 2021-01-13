@@ -3,6 +3,8 @@ import random
 import pandas as pd
 import numpy as np
 from joblib import load
+import statistics
+from datetime import timedelta
 
 # Load Model
 loaded_clf =  load('ml_models\outputs\murb_power_regression.joblib')
@@ -14,9 +16,20 @@ loaded_clf =  load('ml_models\outputs\murb_power_regression.joblib')
 
 def power_from_time(time, parameters):
     # Predict output power
+    time = time - timedelta(hours=5) #Convert to EST for data model
+    data_time = {'hour':time.hour, 'month':time.month}
+    data_averages = {'avgPowerSummer': float(parameters['avgPowerSummer']), 'avgPowerWinter': float(parameters['avgPowerWinter']), 'avgPowerSpring': float(parameters['avgPowerSpring']), 'avgPowerFall': float(parameters['avgPowerFall']), 'avgPower': float(parameters['avgPower'])}
 
-    data = {'hour':time.hour, 'month':time.month, 'avgPower': float(parameters['avgPower']), 'minPower': float(parameters['minPower']), 'maxPower': float(parameters['maxPower'])}
-  
-    df = pd.DataFrame(data, columns = ['hour','month','avgPower', 'minPower', 'maxPower'], index=[0])
+    df_1 = pd.DataFrame(data_time, columns = ['hour','month'], index=[0])
+    df_2 = pd.DataFrame(data_averages, columns = ['avgPowerSummer', 'avgPowerWinter', 'avgPowerSpring', 'avgPowerFall'], index=[0])
+
+    df_2 = df_2.div(float(parameters['avgPower']))
+
+    df = pd.concat([df_1, df_2], axis=1)
+
+    
     predict_output_power = loaded_clf.predict(df)
-    return predict_output_power[0]
+    print(predict_output_power[0]*float(parameters['avgPower']))
+    print(predict_output_power[0])
+    print(time)
+    return predict_output_power[0]*float(parameters['avgPower'])
