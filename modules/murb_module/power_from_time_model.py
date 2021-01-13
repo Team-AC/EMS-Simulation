@@ -31,7 +31,4 @@ def power_from_time(time, parameters):
 
     
     predict_output_power = loaded_clf.predict(df)
-    print(predict_output_power[0]*float(parameters['avgPower']))
-    print(predict_output_power[0])
-    print(time)
     return predict_output_power[0]*float(parameters['avgPower'])
