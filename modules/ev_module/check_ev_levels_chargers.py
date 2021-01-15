@@ -15,6 +15,7 @@ def check_ev_level_2_charger(lvl_2):
                 ev_charger_level_2_num=int(i)
                 full_ev_charger_level_2 = 0
                 return ev_charger_level_2_num, ev_charger_level_2, in_use_or_not_in_use_level_2, full_ev_charger_level_2
+
         
 
 def check_ev_level_3_charger(lvl_3):
@@ -31,5 +32,6 @@ def check_ev_level_3_charger(lvl_3):
                 ev_charger_level_3_num=int(i)
                 full_ev_charger_level_3 = 0
                 return ev_charger_level_3_num, ev_charger_level_3, in_use_or_not_in_use_level_3, full_ev_charger_level_3
+
 
 
