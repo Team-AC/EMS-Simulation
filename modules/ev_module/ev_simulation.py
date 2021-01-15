@@ -9,5 +9,5 @@ def ev_simulation_init(sio):
 
     @sio.on('Generate Ev')
     def generate_ev(interval, paramters_dict):
-        #real_time_data_start(paramters_dict, sio)
-        historical_data(interval, paramters_dict, sio)
+        real_time_data_start(paramters_dict, sio)
+        #historical_data(interval, paramters_dict, sio)
