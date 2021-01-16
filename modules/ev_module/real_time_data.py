@@ -45,7 +45,7 @@ def real_time_data(parameter_dict): #(paramter_dict, sio)
     ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(ev_start_time, parameter_dict)
     charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use = logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, ev_start_time, lvl_2, lvl_3, parameter_dict)
     start_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use, lvl_2, lvl_3)
-    timer = Timer(10, real_time_data)
+    timer = Timer(30, real_time_data, (parameter_dict,))
     timer.start()
 
 
