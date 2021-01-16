@@ -33,27 +33,30 @@ def start_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_star
 
 
 
-def real_time_data(): #(paramter_dict, sio)
+#lvl_2 = [0 for x in range(3)]
+#lvl_3 = [0 for x in range(3)]
+
+def real_time_data(parameter_dict): #(paramter_dict, sio)
     global lvl_2
     global lvl_3
     global timer
 
     ev_start_time = datetime.now(timezone.utc)
-    ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(ev_start_time)
-    charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use = logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, ev_start_time, lvl_2, lvl_3)
+    ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(ev_start_time, parameter_dict)
+    charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use = logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, ev_start_time, lvl_2, lvl_3, parameter_dict)
     start_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use, lvl_2, lvl_3)
     timer = Timer(10, real_time_data)
     timer.start()
 
 
-def real_time_data_start(paramter_dict, sio_passed_in):
+def real_time_data_start(parameter_dict, sio_passed_in):
     global sio
     global lvl_2
     global lvl_3
-    lvl_2 = [0 for x in range(int(paramter_dict['num_ev_level_2']))]
-    lvl_3 = [0 for x in range(int(paramter_dict['num_ev_level_3']))]
+    lvl_2 = [0 for x in range(int(parameter_dict['numOfEvLevel2']))]
+    lvl_3 = [0 for x in range(int(parameter_dict['numOfEvLevel3']))]
     sio = sio_passed_in
-    real_time_data()
+    real_time_data(parameter_dict)
 
 
     @sio.on('Stop Ev Power')
@@ -80,6 +83,4 @@ def real_time_data_start(paramter_dict, sio_passed_in):
             'lvl_2_statuses': lvl_2,
             'lvl_3_statuses': lvl_3
         }
-
-    
 
