@@ -8,10 +8,10 @@ def check_ev_coming_in_to_charge(ev_start_time, parameter_dict):
     chance_ev_wants_charge = random.uniform(0, 1) # this the chance that ev comes in and wants to charge
     probability_of_ev = float(parameter_dict['percentageOfEv']) #Default Value
     car_type = random.uniform(0,1)
-    car_entered = car_flow(parameter_dict)
+    car_entered, num_of_cars = car_flow(parameter_dict)
     
-    if car_entered == 1:
-        if car_type <= probability_of_ev:
+    if car_entered and car_type <= probability_of_ev:
+        for x in range(num_of_cars):
             if ev_start_time_hour >= 0 and ev_start_time_hour < 7: # 12am - 6am
                 probability_of_ev_charging = 0.2
                 if (chance_ev_wants_charge <= probability_of_ev_charging):     
@@ -61,8 +61,6 @@ def check_ev_coming_in_to_charge(ev_start_time, parameter_dict):
                     ev_wanting_charge = False
                     print('ev dont wants it b/t 8pm - 12am')
                     return ev_wanting_charge, None
-        else:
-            return False, None
     else:
-        return False, None 
+        return False, None
 
