@@ -9,14 +9,14 @@ from datetime import timedelta
 # Load Model
 loaded_clf =  load('ml_models\outputs\murb_power_regression.joblib')
 
-# Define X_test
+# Get the weekday number
 
 
 # Fucntion Requires datetime object
 
 def power_from_time(time, parameters):
     # Predict output power
-    time = time - timedelta(hours=5) #Convert to EST for data model
+    #time = time - timedelta(hours=8) #Convert to EST for data model
     data_time = {'hour':time.hour, 'month':time.month}
     data_averages = {'avgPowerSummer': float(parameters['avgPowerSummer']), 'avgPowerWinter': float(parameters['avgPowerWinter']), 'avgPowerSpring': float(parameters['avgPowerSpring']), 'avgPowerFall': float(parameters['avgPowerFall']), 'avgPower': float(parameters['avgPower'])}
 
@@ -29,7 +29,9 @@ def power_from_time(time, parameters):
 
     
     predict_output_power = loaded_clf.predict(df)
-    print(predict_output_power[0]*float(parameters['avgPower']))
-    print(predict_output_power[0])
-    print(time)
-    return predict_output_power[0]*float(parameters['avgPower'])
+    
+    print(random.uniform(-0.01*predict_output_power[0]*float(parameters['avgPower']),0.01*predict_output_power[0]*float(parameters['avgPower'])))
+    if time.weekday() < 5:
+        return predict_output_power[0]*float(parameters['avgPower']) + predict_output_power[0]*float(parameters['avgPower'])*(-0.05) + random.uniform(-0.01*predict_output_power[0]*float(parameters['avgPower']),0.01*predict_output_power[0]*float(parameters['avgPower']))
+    else:
+        return predict_output_power[0]*float(parameters['avgPower']) + predict_output_power[0]*float(parameters['avgPower'])*0.025 + random.uniform(-0.01*predict_output_power[0]*float(parameters['avgPower']),0.01*predict_output_power[0]*float(parameters['avgPower']))
