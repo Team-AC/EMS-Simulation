@@ -2,6 +2,8 @@ from datetime import timedelta, datetime, timezone
 from threading import Timer
 from modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to_charge
 from modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
+from modules.ev_module.check_ev_levels_chargers import check_ev_level_2_charger, check_ev_level_3_charger
+
 
 #Real Time Data
 def end_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use, lvl_2, lvl_3):
@@ -37,12 +39,14 @@ def start_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_star
 def real_time_data(parameter_dict): #(paramter_dict, sio)
     global lvl_2
     global lvl_3
-    
+    global timer
+
     ev_start_time = datetime.now(timezone.utc)
     ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(ev_start_time, parameter_dict)
     charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use = logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, ev_start_time, lvl_2, lvl_3, parameter_dict)
     start_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_start_time, in_use, lvl_2, lvl_3)
-    Timer(30, real_time_data).start()
+    timer = Timer(30, real_time_data, (parameter_dict,))
+    timer.start()
 
 
 def real_time_data_start(parameter_dict, sio_passed_in):
@@ -53,4 +57,30 @@ def real_time_data_start(parameter_dict, sio_passed_in):
     lvl_3 = [0 for x in range(int(parameter_dict['numOfEvLevel3']))]
     sio = sio_passed_in
     real_time_data(parameter_dict)
+
+
+    @sio.on('Stop Ev Power')
+    def stop_ev_data():
+        if 'timer' in globals():
+            timer.cancel()
+
+
+    @sio.on('Status Check Ev')
+    def status_check_ev():
+        if 'timer' in globals():
+            real_time_data_status = timer.is_alive()
+        else:
+            real_time_data_status = False
+            
+        return {
+            'real_time_data_status': real_time_data_status
+        }
+
+
+    @sio.on('Status Check Ev Chargers')
+    def status_check_ev_charger():
+        return {
+            'lvl_2_statuses': lvl_2,
+            'lvl_3_statuses': lvl_3
+        }
 

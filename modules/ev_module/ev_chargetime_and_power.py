@@ -77,6 +77,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             
 
             #algo for power and time
+            
             power = ((ev_battery_end_percentage - ev_battery_start_percentage)/100)*ev_battery_large
             charge_time = power/ev_charger_lvl_3_rate
 
