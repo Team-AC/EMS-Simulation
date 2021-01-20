@@ -18,7 +18,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
 
     if ev_wanting_charge == 1 and ev_charger_level == 2:
         if chance_ev_battery_size < ev_battery_small_probability: # 20% of EV's are small
-            min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
+            min_charge_percentage = ev_battery_start_percentage + round(gauss(10,2))
             ev_battery_end_percentage = randrange(min_charge_percentage, 100, 1) # NEED TO CHANGE FOR BETTER ACCURACY
             
             #algo for power and time
@@ -28,7 +28,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             return charge_time, power, ev_charger_num, ev_charger_level
             
         elif ((chance_ev_battery_size >= ev_battery_small_probability) and (chance_ev_battery_size < (ev_battery_small_probability + ev_battery_med_probability))): # 60% of EV's are Medium size
-            min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
+            min_charge_percentage = ev_battery_start_percentage + round(gauss(10,2))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1) # this will be the leaving battery percentage 
 
            
@@ -38,7 +38,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             
             return charge_time, power, ev_charger_num, ev_charger_level
         else:
-            min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
+            min_charge_percentage = ev_battery_start_percentage + round(gauss(10,2))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1) # this will be the leaving battery percentage 
             
 
@@ -51,7 +51,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
     elif ev_wanting_charge == 1 and ev_charger_level == 3: # Level 3
        
         if chance_ev_battery_size < ev_battery_small_probability: # 20% of EV's are small
-            min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
+            min_charge_percentage = ev_battery_start_percentage + round(gauss(10,2))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1)
             
             #algo for power and time
@@ -61,7 +61,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             return charge_time, power, ev_charger_num, ev_charger_level
             
         elif ((chance_ev_battery_size >= ev_battery_small_probability) and (chance_ev_battery_size < (ev_battery_small_probability + ev_battery_med_probability))): # 60% of EV's are Medium size
-            min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
+            min_charge_percentage = ev_battery_start_percentage + round(gauss(10,2))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1)
 
             
@@ -72,7 +72,7 @@ def ev_chargetime_and_power(ev_wanting_charge,ev_battery_start_percentage, ev_ch
             return charge_time, power, ev_charger_num, ev_charger_level
             
         else:
-            min_charge_percentage = ev_battery_start_percentage + round(gauss(15,5))
+            min_charge_percentage = ev_battery_start_percentage + round(gauss(10,2))
             ev_battery_end_percentage = randrange(min_charge_percentage,100,1)
             
 
