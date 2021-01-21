@@ -4,8 +4,8 @@ from datetime import time, datetime
 
 def car_flow(parameter_dict):
     high_car_flow = 0.7
-    med_car_flow = 0.2
-    low_car_flow = 0.1
+    med_car_flow = 0.3
+    low_car_flow = 0.15
     car_coming_in = random.uniform(0,1)
     if parameter_dict['carFlow'] == "high":
         if car_coming_in <= high_car_flow:
