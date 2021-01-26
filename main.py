@@ -1,6 +1,8 @@
 import socketio
 import os
 from simulation_modules.simulation import simulation_init
+from design_modules.design import design_init
+from optimization_modules.optimization import optimization_init
 
 sio = socketio.Client()
 
@@ -27,5 +29,7 @@ else:
     sio.connect('http://localhost:3000')
 
 simulation_init(sio)
+design_init(sio)
+optimization_init(sio)
 
 sio.wait()
