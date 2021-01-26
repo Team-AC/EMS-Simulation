@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from time import sleep
 import threading
-from modules.murb_module.power_from_time_model import power_from_time
+from simulation_modules.murb_module.power_from_time_model import power_from_time
 
 my_date = datetime.now(timezone.utc)
 

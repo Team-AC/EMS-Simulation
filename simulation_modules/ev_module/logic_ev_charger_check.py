@@ -1,6 +1,6 @@
 import random
-from modules.ev_module.ev_chargetime_and_power import ev_chargetime_and_power
-from modules.ev_module.check_ev_levels_chargers import check_ev_level_2_charger, check_ev_level_3_charger
+from simulation_modules.ev_module.ev_chargetime_and_power import ev_chargetime_and_power
+from simulation_modules.ev_module.check_ev_levels_chargers import check_ev_level_2_charger, check_ev_level_3_charger
 
 def logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, ev_start_time, lvl_2, lvl_3, parameter_dict):
     ev_charger_level_2_num, ev_charger_level_2, in_use_or_not_in_use_level_2, full_ev_charger_level_2 = check_ev_level_2_charger(lvl_2)

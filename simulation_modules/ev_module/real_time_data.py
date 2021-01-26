@@ -1,8 +1,8 @@
 from datetime import timedelta, datetime, timezone
 from threading import Timer
-from modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to_charge
-from modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
-from modules.ev_module.check_ev_levels_chargers import check_ev_level_2_charger, check_ev_level_3_charger
+from simulation_modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to_charge
+from simulation_modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
+from simulation_modules.ev_module.check_ev_levels_chargers import check_ev_level_2_charger, check_ev_level_3_charger
 
 
 #Real Time Data

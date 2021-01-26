@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime, timezone
 from threading import Timer
-from modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to_charge
-from modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
+from simulation_modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to_charge
+from simulation_modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
 
 ev_charging_queue = []
 dict_interval_hours = {

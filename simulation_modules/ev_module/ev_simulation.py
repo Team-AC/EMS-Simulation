@@ -1,8 +1,8 @@
 from datetime import datetime,timedelta
 from threading import Timer
 
-from modules.ev_module.real_time_data import real_time_data_start
-from modules.ev_module.historical_data import historical_data
+from simulation_modules.ev_module.real_time_data import real_time_data_start
+from simulation_modules.ev_module.historical_data import historical_data
 
 def ev_simulation_init(sio):
     sio.sleep(1)
