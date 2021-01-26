@@ -1,4 +1,5 @@
+from design_modules.finance import finance_init
 
 def design_init(sio):
 
-    print("Design module not initialized yet")
+    finance_init(sio)
