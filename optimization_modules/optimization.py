@@ -1,4 +1,5 @@
+from optimization_modules.predict_ev import predict_ev_init
 
 def optimization_init(sio):
 
-    print("Optimization module not initialized yet")
+    predict_ev_init(sio)
