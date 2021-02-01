@@ -109,11 +109,11 @@ def finance_init(sio):
                 'lvl_2_small': return_level_2[year][0],
                 'lvl_2_medium': return_level_2[year][1],
                 'lvl_2_large': return_level_2[year][2],
+                'lvl_2_combined_cost': return_level_2[year][3],
                 'lvl_3_small': return_level_3[year][0],
                 'lvl_3_medium': return_level_3[year][1],
                 'lvl_3_large': return_level_3[year][2],
-                'lvl_3_combined_cost': return_level_3[year][3],
-                'lvl_2_combined_cost': return_level_2[year][3]
+                'lvl_3_combined_cost': return_level_3[year][3]
 
             })
 
