@@ -7,7 +7,8 @@ cost_per = {}
 amount_of_years = 10
 arrival_flow_percentage_level_2 = 0.25
 arrival_flow_percentage_level_3 = 0.75
-
+ev_growth_per_year = 0.01
+ev_arrivals_starting  = 3000
 
 def inflation_rate_calculation(principal, interest):
     inflation_increase_dict = {}
@@ -25,16 +26,15 @@ def ev_growth(initial, growthpercent):
     return ev_growth_dict
 
 def ev_arrivals(financeParamaters):
-    lvl_2_used = ev_growth(initial = 3000, growthpercent = 0.01)
-    lvl_3_used = ev_growth(initial = 3000, growthpercent = 0.01)
+    ev_growth_charger = ev_growth(initial = ev_arrivals_starting, growthpercent = ev_growth_per_year)
     for year in range(amount_of_years):
-        lvl_2_small_ev = arrival_flow_percentage_level_2*float(lvl_2_used[year])*float(financeParamaters['evSmallBatteryProbability'])
-        lvl_2_med_ev = arrival_flow_percentage_level_2*float(lvl_2_used[year])*float(financeParamaters['evMediumBatteryProbability'])
-        lvl_2_large_ev = arrival_flow_percentage_level_2*float(lvl_2_used[year])*float(financeParamaters['evLargeBatteryProbability'])
+        lvl_2_small_ev = arrival_flow_percentage_level_2*float(ev_growth_charger[year])*float(financeParamaters['evSmallBatteryProbability'])
+        lvl_2_med_ev = arrival_flow_percentage_level_2*float(ev_growth_charger[year])*float(financeParamaters['evMediumBatteryProbability'])
+        lvl_2_large_ev = arrival_flow_percentage_level_2*float(ev_growth_charger[year])*float(financeParamaters['evLargeBatteryProbability'])
 
-        lvl_3_small_ev = arrival_flow_percentage_level_3*float(lvl_3_used[year])*float(financeParamaters['evSmallBatteryProbability'])
-        lvl_3_med_ev = arrival_flow_percentage_level_3*float(lvl_3_used[year])*float(financeParamaters['evMediumBatteryProbability'])
-        lvl_3_large_ev = arrival_flow_percentage_level_3*float(lvl_3_used[year])*float(financeParamaters['evLargeBatteryProbability'])
+        lvl_3_small_ev = arrival_flow_percentage_level_3*float(ev_growth_charger[year])*float(financeParamaters['evSmallBatteryProbability'])
+        lvl_3_med_ev = arrival_flow_percentage_level_3*float(ev_growth_charger[year])*float(financeParamaters['evMediumBatteryProbability'])
+        lvl_3_large_ev = arrival_flow_percentage_level_3*float(ev_growth_charger[year])*float(financeParamaters['evLargeBatteryProbability'])
 
         numofevperyear.update({year: [lvl_2_small_ev, lvl_2_med_ev, lvl_2_large_ev, lvl_3_small_ev, lvl_3_med_ev, lvl_3_large_ev]})
     return numofevperyear
