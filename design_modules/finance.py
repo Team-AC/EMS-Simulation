@@ -18,13 +18,12 @@ def expected_battery_calculation(financeParamaters):
     expected_battery_size = int(financeParamaters['evSmallBatteryAverage'])*float(financeParamaters['evSmallBatteryProbability'])\
     + int(financeParamaters['evMediumBatteryAverage'])*float(financeParamaters['evMediumBatteryProbability'])\
     + int(financeParamaters['evLargeBatteryAverage'])*float(financeParamaters['evLargeBatteryProbability'])
-    #print(expected_battery_size)
     return expected_battery_size
 
 def ev_arrivals(financeParamaters):
     num_of_ev_per_year = []
-    expected_battery_size = expected_battery_calculation(financeParamaters)
-    ev_growth_charger = ev_growth(initial=float(financeParamaters['evArrivalsPerYear']), growthpercent=float(financeParamaters['evGrowthPerYear']), financeParamaters=financeParamaters)
+    ev_growth_charger = ev_growth(initial=float(financeParamaters['evArrivalsPerYear']), growthpercent=float(financeParamaters['evGrowthPerYear']),\
+    financeParamaters=financeParamaters)
     for year in range(int(financeParamaters['amountOfYears'])):
         arrival_expectation = float(ev_growth_charger[year])
         num_of_ev_per_year.append(arrival_expectation)
@@ -36,12 +35,10 @@ def cost_per_charge(financeParamaters):
     average_charge_percentage = 0.6
     expected_battery_size = expected_battery_calculation(financeParamaters)
     charge_amount = expected_battery_size*average_charge_percentage
-    charge_cost_per_kwh = inflation_rate_calculation(principal=float(financeParamaters['energyCost']), interest=0.02, financeParamaters=financeParamaters)
+    charge_cost_per_kwh = inflation_rate_calculation(principal=float(financeParamaters['energyCost']), interest=float(financeParamaters['inflationRate']), financeParamaters=financeParamaters)
 
     for year in range(int(financeParamaters['amountOfYears'])):
-        
         cost_level_2 = float(charge_cost_per_kwh[year])*float(charge_amount)
-
         cost_per.append(cost_level_2)
 
     return cost_per
