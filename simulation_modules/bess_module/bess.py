@@ -4,7 +4,7 @@ from threading import Timer
 class Bess:
 
     # 2 clock types - real_time (synced to system clock) and manual (must be manually updated)
-    def __init__(self, bess_parameters, clock_type='real_time', clock_start=datetime.now()):
+    def __init__(self, bess_parameters, clock_start=datetime.now(timezone.utc)):
 
         self.charge_capacity = float(bess_parameters['batteryCapacity']) # measured in kWh
 
@@ -18,10 +18,18 @@ class Bess:
 
         self.charge_rate = float(bess_parameters['batteryPower']) # measured in kW
 
-        if (clock_type == 'real_time'):
-            self.real_time_clock()
+        self.historic_clock()
     
     ### INTERNAL METHODS (Don't use outside class definition) ###
+
+    def historic_clock(self):
+        interval = timedelta(seconds=30)
+
+        while(self.internal_clock < datetime.now(timezone.utc)):
+            self.on_clock_update(self.internal_clock - interval, self.internal_clock)
+            self.internal_clock += interval
+
+        self.real_time_clock()
 
     def real_time_clock(self, prev_datetime=None):
         interval = 30.0 # in seconds, currently hard-coded but might need to change
@@ -45,11 +53,8 @@ class Bess:
         if self.charging_status == 'idle':
             pass # TODO put in decay
 
-        elif self.charging_status == 'charging':
+        elif (self.charging_status == 'charging') or (self.charging_status == 'discharging'):
             self.charge(delta_hours)
-
-        elif self.charging_status == 'discharging': 
-            self.discharge(delta_hours)
         
         else:
             raise RuntimeError('charging_status must always have one of the following values - idle, charging, discharging')
@@ -59,18 +64,27 @@ class Bess:
 
     def charge(self, delta_hours):
 
-        max_delta_charge_amount = (delta_hours*self.charge_rate) # max amount it can charge within this time delta
+        charge_sign = 1 # Controls the charging value's sign. Positive for charging, negative for discharging.
+
+        if (self.charging_status == 'discharging'):
+            charge_sign = -1
+
+        delta_charge_amount = (delta_hours*charge_sign*self.charge_rate) # max amount it can charge/discharge within this time delta
         
-        if (self.need_to_charge > max_delta_charge_amount):
+        if (abs(self.need_to_charge) > abs(delta_charge_amount)):
 
-            updated_charge = self.current_charge + max_delta_charge_amount
+            updated_charge = self.current_charge + delta_charge_amount
 
-            if (updated_charge < self.charge_capacity):
+            if (0 < updated_charge < self.charge_capacity):
                 self.current_charge = updated_charge
 
             else:
-                self.current_charge = self.charge_capacity
-                self.reset_status() # fully charged so reset status
+                if (self.charging_status == 'charging'):
+                    self.current_charge = self.charge_capacity
+                elif (self.charging_status == 'discharging'):
+                    self.current_charge = 0
+
+                self.reset_status() # fully charged/discharged so reset status
         
         else:
             updated_charge += self.need_to_charge # add whatever is left in what it needs to charge
@@ -91,4 +105,4 @@ class Bess:
                 raise RuntimeError('need_to_charge must be a positive or negative value')
 
         else:
-            raise RuntimeWarning('Attempted to charge Bess while not in idle state')
+            raise RuntimeWarning('Attempted to charge Bess while not in idle state, request to charge was ignored')

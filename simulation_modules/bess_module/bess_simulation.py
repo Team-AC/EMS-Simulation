@@ -1,16 +1,22 @@
 from simulation_modules.bess_module.bess import Bess
+from datetime import datetime, timedelta, timezone
 
-real_time_bess = None
+bess = None
 
 def bess_simulation_init(sio):
 
     @sio.on("Bess Init")
     def bess_init(bess_parameters):
-        global real_time_bess
+        global bess
 
-        real_time_bess = Bess(bess_parameters)
+        bess = Bess(bess_parameters, datetime.now(timezone.utc) - timedelta(hours=24))
 
     @sio.on("Bess Charge")
-    def bess_charge(charge_amount=None):
-        real_time_bess.start_charging(real_time_bess.charge_capacity)
+    def bess_charge(charge_amount):
+        if (charge_amount == 'full'):
+            bess.start_charging(bess.charge_capacity)
+        elif (charge_amount == 'empty'):
+            bess.start_charging(-bess.charge_capacity)
+        else:
+            bess.start_charging(float(charge_amount))
 
