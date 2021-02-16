@@ -15,26 +15,37 @@ def ev_growth(initial, growthpercent, financeParamaters):
     return ev_growth_list
 
 
-def ev_arrivals(financeParamaters):
-    num_of_ev_per_year = []
-    growth_percent = ((financeParamaters['future']['evArrivalsPerYear']-financeParamaters['present']['evArrivalsPerYear'])/(financeParamaters['present']['evArrivalsPerYear']))\
-    /financeParamaters['present']['amountOfYears']
-    ev_growth_charger = ev_growth(initial=float(financeParamaters['present']['evArrivalsPerYear']), growthpercent=growth_percent,\
-    financeParamaters=financeParamaters)
+def linear_growth_rate_calculator(present, future, financeParamaters):
+    linear_growth_list = []
     for year in range(int(financeParamaters['present']['amountOfYears'])):
-        arrival_expectation = float(ev_growth_charger[year])
-        num_of_ev_per_year.append(arrival_expectation)
-    return num_of_ev_per_year
+        difference = (float(future)-float(present))/financeParamaters['present']['amountOfYears']
+        amount_for_that_year = float(present) + difference*float(year+1)
+        linear_growth_list.append(amount_for_that_year)
+    return linear_growth_list
+
+
+
+def ev_arrivals(financeParamaters):
+    ev_arrival = linear_growth_rate_calculator(present=financeParamaters['present']['evArrivalsPerYear'],\
+    future=financeParamaters['future']['evArrivalsPerYear'], financeParamaters=financeParamaters)
+
+    return ev_arrival
 
 
 def cost_per_charge(financeParamaters):
     cost_per = []
-    average_charge_percentage = financeParamaters['present']['averageChargePercentage']
-    charge_amount = financeParamaters['present']['averageBatterySize']*average_charge_percentage
+    
+    average_charge_percentage = linear_growth_rate_calculator(present=financeParamaters['present']['averageChargePercentage'],\
+    future=financeParamaters['future']['averageChargePercentage'], financeParamaters=financeParamaters)
+
+    battery_size = linear_growth_rate_calculator(present=financeParamaters['present']['averageBatterySize'],\
+    future=financeParamaters['future']['averageBatterySize'], financeParamaters=financeParamaters)
+ 
     charge_cost_per_kwh = inflation_rate_calculation(principal=float(financeParamaters['present']['energyCost']), interest=float(financeParamaters['present']['inflationRate']),\
     financeParamaters=financeParamaters)
 
     for year in range(int(financeParamaters['present']['amountOfYears'])):
+        charge_amount = average_charge_percentage[year]*battery_size[year]
         cost_level_2 = float(charge_cost_per_kwh[year])*float(charge_amount)
         cost_per.append(cost_level_2)
 
@@ -63,15 +74,17 @@ def initial_cost(financeParamaters):
     return initial_cost_lvl_2, initial_cost_lvl_3"""
 
 def network_cost(financeParamaters):
-    network_cost_per_year = inflation_rate_calculation(principal=float(financeParamaters['present']['networkCost']), interest=float(financeParamaters['present']['inflationRate']), financeParamaters=financeParamaters)
-
+    network_cost_per_year = linear_growth_rate_calculator(present=financeParamaters['present']['networkCost'], future=financeParamaters['future']['networkCost'], \
+    financeParamaters=financeParamaters)
     return network_cost_per_year
 
 
 def maintenance_cost(financeParamaters):
 
-    maintenance_cost_per_year_lvl_2 = inflation_rate_calculation(principal=float(financeParamaters['present']['maintenanceLevel2']), interest=float(financeParamaters['present']['inflationRate']), financeParamaters=financeParamaters)
-    maintenance_cost_per_year_lvl_3 = inflation_rate_calculation(principal=float(financeParamaters['present']['maintenanceLevel3']), interest=float(financeParamaters['present']['inflationRate']), financeParamaters=financeParamaters)
+    maintenance_cost_per_year_lvl_2 = linear_growth_rate_calculator(present=financeParamaters['present']['maintenanceLevel2'], future=financeParamaters['future']['maintenanceLevel2'], \
+    financeParamaters=financeParamaters)
+    maintenance_cost_per_year_lvl_3 = linear_growth_rate_calculator(present=financeParamaters['present']['maintenanceLevel3'], future=financeParamaters['future']['maintenanceLevel3'], \
+    financeParamaters=financeParamaters)
 
     return maintenance_cost_per_year_lvl_2, maintenance_cost_per_year_lvl_3
 
@@ -82,13 +95,14 @@ def finance_init(sio):
         return_level_2, return_level_3 = charger_cost_for_a_year(financeParamaters)
         return_network_cost = network_cost(financeParamaters)
         return_maintenance_cost_lvl_2, return_maintenance_cost_lvl_3 = maintenance_cost(financeParamaters)
-
+        return_ev_arrival = ev_arrivals(financeParamaters)
         list_future_projections = []
         
         for year in range(int(financeParamaters['present']['amountOfYears'])):
             list_future_projections.append({
                 'year': year,
                 'network_cost': return_network_cost[year],
+                'ev_arrival': return_ev_arrival[year],
                 'lvl_2_maintenance_cost': return_maintenance_cost_lvl_2[year],
                 'lvl_3_maintenance_cost': return_maintenance_cost_lvl_3[year],
                 'lvl_2': return_level_2[year],
