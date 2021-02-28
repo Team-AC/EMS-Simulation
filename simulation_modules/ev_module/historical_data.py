@@ -1,5 +1,6 @@
 from datetime import timedelta, datetime, timezone
 from threading import Timer
+from simulation_modules.bess_module.bess import Bess
 from simulation_modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to_charge
 from simulation_modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
 
@@ -55,12 +56,13 @@ def historical_data(interval, parameter_dict, sio_passed_in): #(paramter_dict, s
     lvl_2 = [0 for x in range(int(parameter_dict['numOfEvLevel2']))]
     lvl_3 = [0 for x in range(int(parameter_dict['numOfEvLevel3']))]
     historical_start_time = datetime.now(timezone.utc) - timedelta(hours=dict_interval_hours[interval])
-    historical_end_time = datetime.now(timezone.utc)
 
     historical_current_time = historical_start_time
     time_increment = timedelta(seconds=30)
 
-    while (historical_current_time < historical_end_time):
+    bess = Bess({"batteryCapacity": 300, "batteryPower": 100}, sio, historical_start_time)
+
+    while (historical_current_time < datetime.now(timezone.utc)):
         ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(historical_current_time, parameter_dict)
         charge_time, power, ev_charger_num, ev_charger_level, _, in_use = logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, historical_current_time, lvl_2, lvl_3, parameter_dict)
         if in_use == 1:
@@ -73,7 +75,8 @@ def historical_data(interval, parameter_dict, sio_passed_in): #(paramter_dict, s
             
                 index = ev_charging_queue.index({"finish_charging_time": ev['finish_charging_time'],"arguments": ev['arguments']})
                 ev_charging_queue.pop(index)
-                
+        
 
         historical_current_time += time_increment
+        bess.clock_update(historical_current_time)
 

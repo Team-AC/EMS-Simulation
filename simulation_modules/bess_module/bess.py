@@ -4,7 +4,9 @@ from threading import Timer
 class Bess:
 
     # 2 clock types - real_time (synced to system clock) and manual (must be manually updated)
-    def __init__(self, bess_parameters, clock_start=datetime.now(timezone.utc)):
+    def __init__(self, bess_parameters, sio, clock_start=datetime.now(timezone.utc)):
+
+        self.sio = sio
 
         self.charge_capacity = float(bess_parameters['batteryCapacity']) # measured in kWh
 
@@ -18,7 +20,7 @@ class Bess:
 
         self.charge_rate = float(bess_parameters['batteryPower']) # measured in kW
 
-        self.historic_clock()
+        # self.historic_clock()
     
     ### INTERNAL METHODS (Don't use outside class definition) ###
 
@@ -59,8 +61,14 @@ class Bess:
         else:
             raise RuntimeError('charging_status must always have one of the following values - idle, charging, discharging')
         
-        print(self.__dict__)
+        self.internal_clock = new_datetime
 
+        self.sio.emit("New Bess", {
+            "CurrentCharge": self.current_charge,
+            "TimeStamp": self.internal_clock.isoformat(),
+            "ChargingStatus": self.charging_status,
+            "NeedToCharge": self.need_to_charge
+        })
 
     def charge(self, delta_hours):
 
@@ -91,6 +99,10 @@ class Bess:
             self.reset_status()
 
     ### PUBLIC METHODS (for use outside class definition) ###
+
+    def clock_update(self, new_datetime):
+        old_datetime = self.internal_clock
+        self.on_clock_update(old_datetime, new_datetime)
 
     def start_charging(self, need_to_charge): # need_to_charge is positive for charging and negative for discharging
         if (self.charging_status == 'idle'):

@@ -9,7 +9,7 @@ def bess_simulation_init(sio):
     def bess_init(bess_parameters):
         global bess
 
-        bess = Bess(bess_parameters, datetime.now(timezone.utc) - timedelta(hours=24))
+        bess = Bess(bess_parameters, sio, datetime.now(timezone.utc) - timedelta(hours=24))
 
     @sio.on("Bess Charge")
     def bess_charge(charge_amount):
