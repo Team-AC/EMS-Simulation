@@ -61,6 +61,7 @@ def historical_data(interval, parameter_dict, sio_passed_in): #(paramter_dict, s
     time_increment = timedelta(seconds=30)
 
     bess = Bess({"batteryCapacity": 300, "batteryPower": 100}, sio, historical_start_time)
+    bess.start_charging(bess.charge_capacity) # Charge to full
 
     while (historical_current_time < datetime.now(timezone.utc)):
         ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(historical_current_time, parameter_dict)
@@ -78,5 +79,13 @@ def historical_data(interval, parameter_dict, sio_passed_in): #(paramter_dict, s
         
 
         historical_current_time += time_increment
-        bess.clock_update(historical_current_time)
+        
+        bess_status = bess.clock_update(historical_current_time)
+        bess_current_charge = bess.current_charge
+
+        if ("finished_charge" in bess_status):
+            if (bess_current_charge < bess.charge_capacity):
+                bess.start_charging(bess.charge_capacity) # Charge to full
+            else:
+                bess.start_charging(-bess.charge_capacity) # Charge to min
 

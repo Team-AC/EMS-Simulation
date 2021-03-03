@@ -20,6 +20,9 @@ class Bess:
 
         self.charge_rate = float(bess_parameters['batteryPower']) # measured in kW
 
+        # Status returned in every clock_update call with some information represented as a dict
+        self.clock_update_status = {}
+
         # self.historic_clock()
     
     ### INTERNAL METHODS (Don't use outside class definition) ###
@@ -80,29 +83,37 @@ class Bess:
         delta_charge_amount = (delta_hours*charge_sign*self.charge_rate) # max amount it can charge/discharge within this time delta
         
         if (abs(self.need_to_charge) > abs(delta_charge_amount)):
-
             updated_charge = self.current_charge + delta_charge_amount
+            self.update_charge(updated_charge)
+            self.need_to_charge -= delta_charge_amount
 
-            if (0 < updated_charge < self.charge_capacity):
-                self.current_charge = updated_charge
-
-            else:
-                if (self.charging_status == 'charging'):
-                    self.current_charge = self.charge_capacity
-                elif (self.charging_status == 'discharging'):
-                    self.current_charge = 0
-
-                self.reset_status() # fully charged/discharged so reset status
-        
         else:
-            updated_charge += self.need_to_charge # add whatever is left in what it needs to charge
+            updated_charge = self.current_charge + self.need_to_charge # add whatever is left in what it needs to charge
+            self.update_charge(updated_charge)
+
+            self.clock_update_status["finished_charge"] = True
             self.reset_status()
 
-    ### PUBLIC METHODS (for use outside class definition) ###
+    def update_charge(self, updated_charge):
+        # If the new charge is within the bounds of the battery's capacity
+        if (0 < updated_charge < self.charge_capacity):
+            self.current_charge = updated_charge
+
+        else:
+            if (self.charging_status == 'charging'):
+                self.current_charge = self.charge_capacity
+            elif (self.charging_status == 'discharging'):
+                self.current_charge = 0
+                self.clock_update_status["discharge_remaining"] = -updated_charge # Put in the status there is some discharge remaining
+
+            self.reset_status() # fully charged/discharged so reset status
 
     def clock_update(self, new_datetime):
         old_datetime = self.internal_clock
+        self.clock_update_status = {} # Reset update status every run
+
         self.on_clock_update(old_datetime, new_datetime)
+        return self.clock_update_status
 
     def start_charging(self, need_to_charge): # need_to_charge is positive for charging and negative for discharging
         if (self.charging_status == 'idle'):
