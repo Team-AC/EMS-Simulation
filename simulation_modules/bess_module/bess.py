@@ -66,6 +66,11 @@ class Bess:
         
         self.internal_clock = new_datetime
 
+        # emit data every hour
+        if (old_datetime.hour != new_datetime.hour):
+            self.emit_data()
+    
+    def emit_data(self):
         self.sio.emit("New Bess", {
             "CurrentCharge": self.current_charge,
             "TimeStamp": self.internal_clock.isoformat(),
