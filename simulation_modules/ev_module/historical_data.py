@@ -46,26 +46,26 @@ def start_charging(charge_time, power, ev_charger_num, ev_charger_level, in_use,
         "arguments": (charge_time, power, ev_charger_num, ev_charger_level, in_use, lvl_2, lvl_3)
     })
 
-def historical_data(interval, parameter_dict, sio_passed_in): #(paramter_dict, sio)
+def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_passed_in): #(paramter_dict, sio)
     global sio
     sio = sio_passed_in
     global lvl_2
     global lvl_3
     global historical_current_time
     global ev_charging_queue
-    lvl_2 = [0 for x in range(int(parameter_dict['numOfEvLevel2']))]
-    lvl_3 = [0 for x in range(int(parameter_dict['numOfEvLevel3']))]
+    lvl_2 = [0 for x in range(int(ev_parameters_dict['numOfEvLevel2']))]
+    lvl_3 = [0 for x in range(int(ev_parameters_dict['numOfEvLevel3']))]
     historical_start_time = datetime.now(timezone.utc) - timedelta(hours=dict_interval_hours[interval])
 
     historical_current_time = historical_start_time
     time_increment = timedelta(seconds=30)
 
-    bess = Bess({"batteryCapacity": 300, "batteryPower": 100}, sio, historical_start_time)
+    bess = Bess(bess_parameters_dict, sio, historical_start_time)
     bess.start_charging(bess.charge_capacity) # Charge to full
 
     while (historical_current_time < datetime.now(timezone.utc)):
-        ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(historical_current_time, parameter_dict)
-        charge_time, power, ev_charger_num, ev_charger_level, _, in_use = logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, historical_current_time, lvl_2, lvl_3, parameter_dict)
+        ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(historical_current_time, ev_parameters_dict)
+        charge_time, power, ev_charger_num, ev_charger_level, _, in_use = logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, historical_current_time, lvl_2, lvl_3, ev_parameters_dict)
         if in_use == 1:
             start_charging(charge_time, power, ev_charger_num, ev_charger_level, in_use, lvl_2, lvl_3)
         
