@@ -113,6 +113,8 @@ class Bess:
 
             self.reset_status() # fully charged/discharged so reset status
 
+    ### PUBLIC METHODS (For use outside class definition) ###
+
     def clock_update(self, new_datetime):
         old_datetime = self.internal_clock
         self.clock_update_status = {} # Reset update status every run
