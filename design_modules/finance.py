@@ -18,7 +18,7 @@ def ev_growth(initial, growthpercent, financeParamaters):
 def linear_growth_rate_calculator(present, future, financeParamaters):
     linear_growth_list = []
     for year in range(int(financeParamaters['amountOfYears'])):
-        difference = (float(future)-float(present))/financeParamaters['amountOfYears']
+        difference = (float(future)-float(present))/float(financeParamaters['amountOfYears'])
         amount_for_that_year = float(present) + difference*float(year+1)
         linear_growth_list.append(amount_for_that_year)
     return linear_growth_list
