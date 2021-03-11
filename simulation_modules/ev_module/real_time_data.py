@@ -11,11 +11,11 @@ def end_charging(charge_time, power, ev_charger_num, ev_charger_level, ev_start_
     if ev_start_time != 0:
         if ev_charger_level == 2:
             lvl_2[int(ev_charger_num)] = in_use
-            print("lvl 2",lvl_2)
+            #print("lvl 2",lvl_2)
         else:
             lvl_3[int(ev_charger_num)] = in_use
-            print("lvl 3",lvl_3)
-        print("charging done and it good to use again")
+            #print("lvl 3",lvl_3)
+        #print("charging done and it good to use again")
         
         ev_time_stamp = ev_start_time + timedelta(seconds=charge_time*3600)
 
