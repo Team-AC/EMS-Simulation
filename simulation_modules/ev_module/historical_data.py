@@ -53,9 +53,6 @@ def bess_schedule_update(ev_parameters_dict):
     print('sim cont')
     historical_charge_queue(ev_parameters_dict)
     
-    
-    
-
 def historical_charge_queue(ev_parameters_dict):
     global historical_current_time
     global historical_start_time
@@ -65,12 +62,6 @@ def historical_charge_queue(ev_parameters_dict):
     time_increment = timedelta(seconds=30)
     sim_new_day = (historical_current_time + timedelta(days=1)).date()
     print('sim start', historical_current_time.date())
-
-
-
-    
-
-
     
     while (historical_current_time < datetime.now(timezone.utc)):
         sim_current_day = historical_current_time.date()
@@ -108,17 +99,6 @@ def historical_charge_queue(ev_parameters_dict):
                 break
             bess_schedule_update(ev_parameters_dict) 
             
-            
-    
-    
-
-    
-            
-    
-        
-
-
-
 def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_passed_in): #(paramter_dict, sio)
     global sio
     sio = sio_passed_in
