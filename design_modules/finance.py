@@ -1,4 +1,4 @@
-from design_modules.costcalculators import charger_cost_for_a_year, network_cost, maintenance_cost
+from design_modules.costcalculators import charger_cost_for_a_year, network_cost, maintenance_cost, surge_calculator
 
 def finance_init(sio):
 
@@ -8,7 +8,7 @@ def finance_init(sio):
         return_network_cost = network_cost(financeParamaters)
         return_maintenance_cost_lvl_2, return_maintenance_cost_lvl_3 = maintenance_cost(financeParamaters)
         list_future_projections = []
-        
+        return_surge_lvl_3 = surge_calculator(financeParamaters)
         for year in range(int(financeParamaters['amountOfYears'])):
             list_future_projections.append({
                 'year': year,
@@ -16,8 +16,8 @@ def finance_init(sio):
                 'lvl_2_maintenance_cost': return_maintenance_cost_lvl_2[year],
                 'lvl_3_maintenance_cost': return_maintenance_cost_lvl_3[year],
                 'lvl_2': return_level_2[year],
-                'lvl_3': return_level_3[year]
-
+                'lvl_3': return_level_3[year],
+                'lvl_3_surge':return_surge_lvl_3[year]
             })
 
         return list_future_projections

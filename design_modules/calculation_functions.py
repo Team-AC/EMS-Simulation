@@ -1,3 +1,4 @@
+
 def inflation_rate_calculation(principal, interest, financeParamaters):
     inflation_increase_list = []
     for year in range(int(financeParamaters['amountOfYears'])):
@@ -13,3 +14,6 @@ def linear_growth_rate_calculator(present, future, financeParamaters):
         amount_for_that_year = float(present) + difference*float(year+1)
         linear_growth_list.append(amount_for_that_year)
     return linear_growth_list
+    
+
+
