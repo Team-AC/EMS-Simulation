@@ -6,6 +6,7 @@ def ev_arrivals(financeParamaters):
 
     return ev_arrival
 
+
 def cost_per_charge(financeParamaters):
     cost_per = []
     
@@ -33,7 +34,7 @@ def charger_cost_for_a_year(financeParamaters):
     cost_per, average_charge_percentage, battery_size = cost_per_charge(financeParamaters)
     for year in range(int(financeParamaters['amountOfYears'])):
         # level 2
-        lvl_2_cost_for_year = float(financeParamaters['arrivalFlowPercentageLevel2'])*float(num_of_ev_per_year[year])*float(cost_per[year])
+        lvl_2_cost_for_year = float(financeParamaters['arrivalFlowPercentageLevel2'])*float(num_of_ev_per_year[year])*float(cost_per[year]) 
         lvl_3_cost_for_year = float(financeParamaters['arrivalFlowPercentageLevel3'])*float(num_of_ev_per_year[year])*float(cost_per[year])
 
         level_2_charge.append(lvl_2_cost_for_year)
@@ -56,7 +57,7 @@ def maintenance_cost(financeParamaters):
 
     return maintenance_cost_per_year_lvl_2, maintenance_cost_per_year_lvl_3
 
-def surge_calculator(financeParamaters):
+def surge_calculator(arrivalflow,financeParamaters):
     # i assume that for a year the amount of arrivals is evenly distributed across 12 months 
     cost_per, average_charge_percentage, battery_size = cost_per_charge(financeParamaters)
     ev_arrival = ev_arrivals(financeParamaters)
@@ -68,11 +69,35 @@ def surge_calculator(financeParamaters):
     financeParamaters=financeParamaters)
 
     surge_calculator_list = []
+  
     for year in range(int(financeParamaters['amountOfYears'])):
-        total_charge_kw_for_year = average_charge_percentage[year]*battery_size[year]*ev_arrival[year]*financeParamaters['arrivalFlowPercentageLevel3']
+        total_charge_kw_for_year = average_charge_percentage[year]*battery_size[year]*ev_arrival[year]*float(arrivalflow)
         if total_charge_kw_for_year > max_amount_kw_for_reg_rate[year]:
             kw_used_past_threshold = total_charge_kw_for_year - max_amount_kw_for_reg_rate[year]
             surged_price_for_year = kw_used_past_threshold*kwh_rate_past_threshold[year]
             surge_calculator_list.append(surged_price_for_year)
-
+        else:
+            surge_calculator_list.append(0)
     return surge_calculator_list
+
+def cost_before_surge(arrivalflow, financeParamaters):
+    cost_per, average_charge_percentage, battery_size = cost_per_charge(financeParamaters)
+    ev_arrival = ev_arrivals(financeParamaters)
+
+    max_amount_kw_for_reg_rate = linear_growth_rate_calculator(present=financeParamaters['present']['kwCapRegularRate'], future=financeParamaters['future']['kwCapRegularRate'], \
+    financeParamaters=financeParamaters)
+
+    charge_cost_per_kwh = inflation_rate_calculation(principal=float(financeParamaters['energyCost']), interest=float(financeParamaters['inflationRate']),\
+    financeParamaters=financeParamaters)
+
+    reg_cost = []
+
+    for year in range(int(financeParamaters['amountOfYears'])): 
+        total_charge_kw_for_year = average_charge_percentage[year]*battery_size[year]*ev_arrival[year]*float(arrivalflow)
+        if total_charge_kw_for_year < max_amount_kw_for_reg_rate[year]:
+            reg_cost.append(total_charge_kw_for_year)
+        else:
+            charge_cost_at_threshold = max_amount_kw_for_reg_rate[year]*charge_cost_per_kwh[year]
+            reg_cost.append(charge_cost_at_threshold)
+    return reg_cost
+    
