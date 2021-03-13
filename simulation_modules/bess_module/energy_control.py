@@ -71,7 +71,7 @@ class EnergyControl:
         print("charging with grid")
         pass # TODO make logic
     
-    def request_charge(self, charge_amount):
+    def request_ev_charge(self, charge_amount):
         mode = self.get_current_mode()
         bess = self.bess
 

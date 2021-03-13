@@ -64,7 +64,7 @@ def historical_charge_queue(ev_parameters_dict):
     sim_new_day = (historical_current_time + timedelta(days=1)).date()
     print('sim start', historical_current_time.date())
     energy_control.clock_update(historical_current_time)
-    energy_control.request_charge(150)
+    energy_control.request_ev_charge(150)
     
     while (historical_current_time < datetime.now(timezone.utc)):
         sim_current_day = historical_current_time.date()
