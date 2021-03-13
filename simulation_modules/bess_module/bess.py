@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from threading import Timer
+from simulation_modules.bess_module.custom_exceptions import ChargeRequestRejected
 
 class Bess:
 
@@ -21,7 +22,11 @@ class Bess:
         self.charge_rate = float(bess_parameters['batteryPower']) # measured in kW
 
         # Status returned in every clock_update call with some information represented as a dict
-        self.clock_update_status = {}
+        self.clock_update_status = {
+            ## Possible Values ##
+            # finished_charge: Boolean
+            # discharge_remaining: Number
+        }
 
         # self.historic_clock()
     
@@ -135,4 +140,4 @@ class Bess:
                 raise RuntimeError('need_to_charge must be a positive or negative value')
 
         else:
-            raise RuntimeWarning('Attempted to charge Bess while not in idle state, request to charge was ignored')
+            raise ChargeRequestRejected('Attempted to charge Bess while not in idle state, request to charge was ignored')

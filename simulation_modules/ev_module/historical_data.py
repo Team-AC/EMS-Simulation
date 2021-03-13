@@ -1,6 +1,7 @@
 from datetime import timedelta, datetime, timezone
 from threading import Timer
 from simulation_modules.bess_module.bess import Bess
+from simulation_modules.bess_module.energy_control import EnergyControl
 from simulation_modules.ev_module.check_ev_coming_in_to_charge import check_ev_coming_in_to_charge
 from simulation_modules.ev_module.logic_ev_charger_check import logic_ev_charger_check
 import time
@@ -62,6 +63,8 @@ def historical_charge_queue(ev_parameters_dict):
     time_increment = timedelta(seconds=30)
     sim_new_day = (historical_current_time + timedelta(days=1)).date()
     print('sim start', historical_current_time.date())
+    energy_control.clock_update(historical_current_time)
+    energy_control.request_charge(150)
     
     while (historical_current_time < datetime.now(timezone.utc)):
         sim_current_day = historical_current_time.date()
@@ -82,14 +85,7 @@ def historical_charge_queue(ev_parameters_dict):
         
 
         historical_current_time += time_increment
-        bess_status = bess.clock_update(historical_current_time)
-        bess_current_charge = bess.current_charge
-
-        if ("finished_charge" in bess_status):
-            if (bess_current_charge < bess.charge_capacity):
-                bess.start_charging(bess.charge_capacity) # Charge to full
-            else:
-                bess.start_charging(-bess.charge_capacity) # Charge to min
+        energy_control.clock_update(historical_current_time)
         
         if sim_current_day == sim_new_day:
             print('sim date', sim_current_day)
@@ -107,8 +103,7 @@ def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_pass
     global historical_current_time
     global ev_charging_queue
     global historical_start_time
-    global bess
-
+    global energy_control
 
     lvl_2 = [0 for x in range(int(ev_parameters_dict['numOfEvLevel2']))]
     lvl_3 = [0 for x in range(int(ev_parameters_dict['numOfEvLevel3']))]
@@ -117,10 +112,7 @@ def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_pass
     historical_current_time = historical_start_time
     
     bess = Bess(bess_parameters_dict, sio, historical_start_time)
-    
-    bess.start_charging(bess.charge_capacity) # Charge to full
-
-
+    energy_control = EnergyControl(bess, [], sio)
 
     #start the sim
     historical_charge_queue(ev_parameters_dict)
