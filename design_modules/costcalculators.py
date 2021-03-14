@@ -16,7 +16,7 @@ def cost_per_charge(financeParamaters):
     battery_size = linear_growth_rate_calculator(present=financeParamaters['present']['averageBatterySize'],\
     future=financeParamaters['future']['averageBatterySize'], financeParamaters=financeParamaters)
  
-    charge_cost_per_kwh = inflation_rate_calculation(principal=float(financeParamaters['energyCost']), interest=float(financeParamaters['inflationRate']),\
+    charge_cost_per_kwh = inflation_rate_calculation(principal=float(financeParamaters['energyCostNoSurge']), interest=float(financeParamaters['inflationRate']),\
     financeParamaters=financeParamaters)
 
     for year in range(int(financeParamaters['amountOfYears'])):
@@ -87,7 +87,7 @@ def cost_before_surge(arrivalflow, financeParamaters):
     max_amount_kw_for_reg_rate = linear_growth_rate_calculator(present=financeParamaters['present']['kwCapRegularRate'], future=financeParamaters['future']['kwCapRegularRate'], \
     financeParamaters=financeParamaters)
 
-    charge_cost_per_kwh = inflation_rate_calculation(principal=float(financeParamaters['energyCost']), interest=float(financeParamaters['inflationRate']),\
+    charge_cost_per_kwh = inflation_rate_calculation(principal=float(financeParamaters['energyCostBeforeThreshold']), interest=float(financeParamaters['inflationRate']),\
     financeParamaters=financeParamaters)
 
     reg_cost = []
