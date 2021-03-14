@@ -101,3 +101,11 @@ def cost_before_surge(arrivalflow, financeParamaters):
             reg_cost.append(charge_cost_at_threshold)
     return reg_cost
     
+def installation_cost(financeParamaters):
+    installation_cost_level_2 = inflation_rate_calculation(principal=float(financeParamaters['installationCostLvl2']), interest=float(financeParamaters['inflationRate']),\
+    financeParamaters=financeParamaters)
+
+    installation_cost_level_3 = inflation_rate_calculation(principal=float(financeParamaters['installationCostLvl3']), interest=float(financeParamaters['inflationRate']),\
+    financeParamaters=financeParamaters)
+
+    return installation_cost_level_2, installation_cost_level_3

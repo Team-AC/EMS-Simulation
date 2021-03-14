@@ -1,9 +1,11 @@
-from design_modules.costcalculators import charger_cost_for_a_year, network_cost, maintenance_cost, surge_calculator, cost_before_surge
+from design_modules.costcalculators import charger_cost_for_a_year, network_cost, maintenance_cost, surge_calculator, cost_before_surge, installation_cost
 
 def finance_init(sio):
 
     @sio.on('Generate Finance')
     def generate_finance(financeParamaters):
+
+        installation_cost_level_2, installation_cost_level_3 = installation_cost(financeParamaters)
 
         return_lvl_2_surge = surge_calculator(arrivalflow=financeParamaters['arrivalFlowPercentageLevel2'], financeParamaters=financeParamaters)
         return_surge_lvl_3 = surge_calculator(arrivalflow=financeParamaters['arrivalFlowPercentageLevel3'], financeParamaters=financeParamaters)
@@ -20,6 +22,8 @@ def finance_init(sio):
             list_future_projections.append({
                 'year': year,
                 'network_cost': return_network_cost[year],
+                'lvl_2_installation_cost': installation_cost_level_2[year],
+                'lvl_3_installation_cost': installation_cost_level_3[year],
                 'lvl_2_maintenance_cost': return_maintenance_cost_lvl_2[year],
                 'lvl_3_maintenance_cost': return_maintenance_cost_lvl_3[year],
                 'lvl_2_no_surge_cost': return_level_2[year],
