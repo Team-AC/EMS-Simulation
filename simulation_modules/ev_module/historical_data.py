@@ -48,28 +48,21 @@ def start_charging(charge_time, power, ev_charger_num, ev_charger_level, in_use,
         "finish_charging_time": historical_current_time + timedelta(hours=charge_time),
         "arguments": (charge_time, power, ev_charger_num, ev_charger_level, in_use, lvl_2, lvl_3)
     })
-
-def bess_schedule_update(ev_parameters_dict):
-    time.sleep(10)
-    print('sim cont')
-    historical_charge_queue(ev_parameters_dict)
     
 def historical_charge_queue(ev_parameters_dict):
     global historical_current_time
     global historical_start_time
     global bess
+    global sio
 
+    print('sim start', historical_current_time.date())
 
     time_increment = timedelta(seconds=30)
-    sim_new_day = (historical_current_time + timedelta(days=1)).date()
-    print('sim start', historical_current_time.date())
     energy_control.clock_update(historical_current_time)
-    energy_control.request_ev_charge(150)
     
     while (historical_current_time < datetime.now(timezone.utc)):
         sim_current_day = historical_current_time.date()
 
-        
         ev_wanting_charge, ev_battery_start_percentage = check_ev_coming_in_to_charge(historical_current_time, ev_parameters_dict)
         charge_time, power, ev_charger_num, ev_charger_level, _, in_use = logic_ev_charger_check(ev_wanting_charge, ev_battery_start_percentage, historical_current_time, lvl_2, lvl_3, ev_parameters_dict)
         if in_use == 1:
@@ -83,17 +76,14 @@ def historical_charge_queue(ev_parameters_dict):
                 index = ev_charging_queue.index({"finish_charging_time": ev['finish_charging_time'],"arguments": ev['arguments']})
                 ev_charging_queue.pop(index)
         
-
+        historical_prev_time = historical_current_time
         historical_current_time += time_increment
         energy_control.clock_update(historical_current_time)
         
-        if sim_current_day == sim_new_day:
-            print('sim date', sim_current_day)
-            print('sim Pause')
-            if sim_current_day == datetime.now(timezone.utc).date():
-                print('SIM FIN',datetime.now(timezone.utc).date())
-                break
-            bess_schedule_update(ev_parameters_dict) 
+        # New day has started
+        if (historical_prev_time.hour == 23) and (historical_current_time.hour == 0):
+            sio.emit("Historical Data Pause", historical_current_time.isoformat())
+            break
             
 def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_passed_in): #(paramter_dict, sio)
     global sio
@@ -114,6 +104,11 @@ def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_pass
     bess = Bess(bess_parameters_dict, sio, historical_start_time)
     energy_control = EnergyControl(bess, [], sio)
 
-    #start the sim
+    # Start the sim
     historical_charge_queue(ev_parameters_dict)
+
+    # Continue the Sim When Server Says
+    @sio.on("Historical Data Continue")
+    def bess_schedule_update(schedule):
+        historical_charge_queue(ev_parameters_dict)
 

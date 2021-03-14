@@ -12,5 +12,5 @@ def ev_simulation_init(sio):
     @sio.on('Generate Ev')
     def generate_ev(interval, ev_parameters_dict, bess_parameters_dict):
         historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio)
-        real_time_data_start(ev_parameters_dict, sio)
+        # real_time_data_start(ev_parameters_dict, sio)
         
