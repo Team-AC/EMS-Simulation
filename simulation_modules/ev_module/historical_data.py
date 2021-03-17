@@ -21,6 +21,9 @@ def end_charging(charge_time, power, ev_charger_num, ev_charger_level, in_use, l
 
     in_use = 0
     if ev_charger_level != 0:
+
+        
+
         if ev_charger_level == 2:
             lvl_2[int(ev_charger_num)] = in_use
             #print("lvl 2",lvl_2)
@@ -43,7 +46,7 @@ def end_charging(charge_time, power, ev_charger_num, ev_charger_level, in_use, l
 #Real Time Data
 def start_charging(charge_time, power, ev_charger_num, ev_charger_level, in_use, lvl_2, lvl_3):
     global ev_charging_queue
-    
+    energy_control.request_ev_charge(power, ev_charger_level)
     ev_charging_queue.append({
         "finish_charging_time": historical_current_time + timedelta(hours=charge_time),
         "arguments": (charge_time, power, ev_charger_num, ev_charger_level, in_use, lvl_2, lvl_3)
@@ -59,6 +62,7 @@ def historical_charge_queue(ev_parameters_dict):
 
     time_increment = timedelta(seconds=30)
     energy_control.clock_update(historical_current_time)
+    energy_control.charge_bess()
     
     while (historical_current_time < datetime.now(timezone.utc)):
         sim_current_day = historical_current_time.date()
@@ -83,6 +87,7 @@ def historical_charge_queue(ev_parameters_dict):
         # New day has started
         if (historical_prev_time.hour == 23) and (historical_current_time.hour == 0):
             sio.emit("Historical Data Pause", historical_current_time.isoformat())
+
             break
             
 def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_passed_in): #(paramter_dict, sio)
@@ -102,7 +107,8 @@ def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_pass
     historical_current_time = historical_start_time
     
     bess = Bess(bess_parameters_dict, sio, historical_start_time)
-    energy_control = EnergyControl(bess, [], sio)
+    energy_control = EnergyControl(bess, [], ev_parameters_dict, bess_parameters_dict ,sio,historical_start_time)
+
 
     # Start the sim
     historical_charge_queue(ev_parameters_dict)
