@@ -7,6 +7,7 @@ import numpy as np
 from joblib import dump, load
 import os
 import dateutil.parser
+import json
 
 def predict_ev_init(sio):
 
@@ -156,7 +157,17 @@ def predict_ev_init(sio):
         clf.predict(df3_X)
         output3 = clf.predict(df_input_lvl2)
         output33 = clf.predict(df_input_lvl3)
-        print(output1)
+        final_output = (1/3)*(output11 + output22 + output33)
 
-        return {'y1': hour1}
+        print(output22)
+        class NumpyArrayEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if isinstance(obj, np.ndarray):
+                    return obj.tolist()
+                return json.JSONEncoder.default(self, obj)
+
+        encodedOutput = json.dumps(final_output, cls=NumpyArrayEncoder)
+        
+
+        return {'y1': encodedOutput}
 
