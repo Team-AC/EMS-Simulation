@@ -93,9 +93,9 @@ class EnergyControl:
    
     def emit_data(self):
         self.sio.emit('New Energy', {
-            'BessEVUsage':self.bess_use['EvUsage'],
+            'BessEvUsage':self.bess_use['EvUsage'],
             'GridEvUsage':self.grid_use["GridUsage"],
-            'Timestamp':self.hour_check.isoformat()
+            'TimeStamp':self.hour_check.isoformat()
         })
         self.bess_use['EvUsage'] = 0
         self.grid_use["GridUsage"] = 0
