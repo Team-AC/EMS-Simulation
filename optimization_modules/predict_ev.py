@@ -64,9 +64,9 @@ def predict_ev_init(sio):
         timestamp_segment_3 = [sub['TimeStamp'] for sub in aggregated_data3]
 
         #Hour Segments
-        hour1 = []
-        hour2 = []
-        hour3 = []
+        day1 = []
+        day2 = []
+        day3 = []
 
         #Month Segments
         month1 = []
@@ -77,39 +77,39 @@ def predict_ev_init(sio):
 
         for value1 in timestamp_segment_1:
             append_time_parameters = dateutil.parser.parse(value1)
-            hour1.append(append_time_parameters.day)
+            day1.append(append_time_parameters.day)
             month1.append(append_time_parameters.month)
 
         #Hour Segment 2
 
         for value2 in timestamp_segment_2:
             append_time_parameters2 = dateutil.parser.parse(value2)
-            hour2.append(append_time_parameters2.day)
+            day2.append(append_time_parameters2.day)
             month2.append(append_time_parameters2.month)
 
         #Hour Segment 3
         for value3 in timestamp_segment_3:
             append_time_parameters3 = dateutil.parser.parse(value3)
-            hour3.append(append_time_parameters3.day)
+            day3.append(append_time_parameters3.day)
             month3.append(append_time_parameters3.month)
 
         #Combine all the lists
 
-        combined_list_segment_1 = month1 + hour1 + charger_type1 + aggregated_amount_segment1 + total_power_segment1
-        combined_list_segment_2 = month2 + hour2 + charger_type2 + aggregated_amount_segment2 + total_power_segment2
-        combined_list_segment_3 = month3 + hour3 + charger_type3 + aggregated_amount_segment3 + total_power_segment3
+        combined_list_segment_1 = month1 + day1 + charger_type1 + aggregated_amount_segment1 + total_power_segment1
+        combined_list_segment_2 = month2 + day2 + charger_type2 + aggregated_amount_segment2 + total_power_segment2
+        combined_list_segment_3 = month3 + day3 + charger_type3 + aggregated_amount_segment3 + total_power_segment3
 
         #Machine Learning Aspect
 
         clf = RandomForestRegressor(n_estimators=500, oob_score=True, random_state=100) #Define Predictor
         
-        df1_X = pd.DataFrame({'Month': month1, 'Hour': hour1, 'Charger Type': charger_type1})
+        df1_X = pd.DataFrame({'Month': month1, 'Hour': day1, 'Charger Type': charger_type1})
         df1_y = pd.DataFrame({'Aggregated Amount': aggregated_amount_segment1, 'Total Power': total_power_segment1})
 
-        df2_X = pd.DataFrame({'Month': month2, 'Hour': hour2, 'Charger Type': charger_type2})
+        df2_X = pd.DataFrame({'Month': month2, 'Hour': day2, 'Charger Type': charger_type2})
         df2_y = pd.DataFrame({'Aggregated Amount': aggregated_amount_segment2, 'Total Power': total_power_segment2})
 
-        df3_X = pd.DataFrame({'Month': month3, 'Hour': hour3, 'Charger Type': charger_type3})
+        df3_X = pd.DataFrame({'Month': month3, 'Hour': day3, 'Charger Type': charger_type3})
         df3_y = pd.DataFrame({'Aggregated Amount': aggregated_amount_segment3, 'Total Power': total_power_segment3})
 
         test_hour= []
@@ -166,8 +166,14 @@ def predict_ev_init(sio):
                     return obj.tolist()
                 return json.JSONEncoder.default(self, obj)
 
-        encodedOutput = json.dumps(final_output, cls=NumpyArrayEncoder)
+        
+        final_output1 = np.array(final_output.tolist())
+        encodedOutput = json.dumps(final_output1, cls=NumpyArrayEncoder)
+        c = json.loads(encodedOutput)
+        
+        f = encodedOutput.split()
+       
         
 
-        return {'y1': encodedOutput}
+        return {'y1': c}
 
