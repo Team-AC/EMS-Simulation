@@ -63,6 +63,7 @@ def historical_charge_queue(ev_parameters_dict):
     time_increment = timedelta(seconds=30)
     energy_control.clock_update(historical_current_time)
     energy_control.charge_bess()
+
     
     while (historical_current_time < datetime.now(timezone.utc)):
         sim_current_day = historical_current_time.date()
