@@ -123,7 +123,7 @@ class EnergyControl:
         self.sio.emit('New Energy', {
             'BessEvUsage':self.bess_use['EvUsage'],
             'GridEvUsage':self.grid_use["GridUsage"],
-            'TimeStamp':self.hour_check.isoformat()
+            'TimeStamp':self.hour_check.isoformat(),
             'BessArbitrage':self.bess_arbitrage['BessArbitrage'],
         })
         self.bess_use['EvUsage'] = 0
