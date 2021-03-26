@@ -159,7 +159,6 @@ def predict_ev_init(sio):
         output33 = clf.predict(df_input_lvl3)
         final_output = (1/3)*(output11 + output22 + output33)
 
-        print(output22)
         class NumpyArrayEncoder(json.JSONEncoder):
             def default(self, obj):
                 if isinstance(obj, np.ndarray):
@@ -169,11 +168,9 @@ def predict_ev_init(sio):
         
         final_output1 = np.array(final_output.tolist())
         encodedOutput = json.dumps(final_output1, cls=NumpyArrayEncoder)
-        c = json.loads(encodedOutput)
+        return_list = json.loads(encodedOutput)
         
         f = encodedOutput.split()
        
-        
-
-        return {'y1': c}
+        return return_list
 
