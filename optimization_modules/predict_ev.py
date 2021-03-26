@@ -172,5 +172,10 @@ def predict_ev_init(sio):
         
         f = encodedOutput.split()
        
-        return return_list
+        empty_list = []
+        if not historic_data[0] or not historic_data[1] or not historic_data[2]:
+            return empty_list
+        else:
+            return return_list
+        
 
