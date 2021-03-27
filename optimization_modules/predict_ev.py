@@ -14,6 +14,10 @@ def predict_ev_init(sio):
     @sio.on('Generate EV Prediction')
     def generate_ev_predict(historic_data, ev_predict_params, list_timestamps):
 
+        empty_list = []
+        if not historic_data[0]['aggregatedData'] or not historic_data[1]['aggregatedData'] or not historic_data[2]['aggregatedData']:
+            return empty_list
+
         def search(interval):
             for p in historic_data:
                 if p['interval'] == interval:
@@ -172,10 +176,8 @@ def predict_ev_init(sio):
         
         f = encodedOutput.split()
        
-        empty_list = []
-        if not historic_data[0] or not historic_data[1] or not historic_data[2]:
-            return empty_list
-        else:
-            return return_list
+
+
+        return return_list
         
 
