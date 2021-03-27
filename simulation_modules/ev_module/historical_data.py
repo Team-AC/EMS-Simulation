@@ -91,7 +91,7 @@ def historical_charge_queue(ev_parameters_dict):
 
             break
             
-def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_passed_in): #(paramter_dict, sio)
+def historical_data(interval, ev_parameters_dict, bess_parameters_dict, init_schedule, sio_passed_in): #(paramter_dict, sio)
     global sio
     sio = sio_passed_in
     global lvl_2
@@ -108,7 +108,7 @@ def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_pass
     historical_current_time = historical_start_time
     
     bess = Bess(bess_parameters_dict, sio, historical_start_time)
-    energy_control = EnergyControl(bess, [], ev_parameters_dict, bess_parameters_dict ,sio,historical_start_time)
+    energy_control = EnergyControl(bess, init_schedule, ev_parameters_dict, bess_parameters_dict ,sio,historical_start_time)
 
 
     # Start the sim
@@ -117,5 +117,6 @@ def historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio_pass
     # Continue the Sim When Server Says
     @sio.on("Historical Data Continue")
     def bess_schedule_update(schedule):
+        energy_control.update_schedule(schedule)
         historical_charge_queue(ev_parameters_dict)
 

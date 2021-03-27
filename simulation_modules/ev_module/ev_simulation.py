@@ -10,7 +10,7 @@ def ev_simulation_init(sio):
     sio.sleep(1)
 
     @sio.on('Generate Ev')
-    def generate_ev(interval, ev_parameters_dict, bess_parameters_dict):
-        historical_data(interval, ev_parameters_dict, bess_parameters_dict, sio)
+    def generate_ev(interval, ev_parameters_dict, bess_parameters_dict, init_schedule):
+        historical_data(interval, ev_parameters_dict, bess_parameters_dict, init_schedule, sio)
         # real_time_data_start(ev_parameters_dict, sio)
         

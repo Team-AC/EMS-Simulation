@@ -19,39 +19,39 @@ def validate_schedule(schedule):
     }]
     """
 
-    temp_schedule = [{
-        "start": {
-            "hour": 0,
-            "minute": 0
-        },
-        "end": {
-            "hour": 12,
-            "minute": 0
-        },
-        "mode": "charge"
-    }, {
-        "start": {
-            "hour": 12,
-            "minute": 0
-        },
-        "end": {
-            "hour": 15,
-            "minute": 0
-        },
-        "mode": "discharge_arbitrage"
-    }, {
-        "start": {
-            "hour": 15,
-            "minute": 0
-        },
-        "end": {
-            "hour": 23,
-            "minute": 59
-        },
-        "mode": "charge"
-    }]
+    # temp_schedule = [{
+    #     "start": {
+    #         "hour": 0,
+    #         "minute": 0
+    #     },
+    #     "end": {
+    #         "hour": 12,
+    #         "minute": 0
+    #     },
+    #     "mode": "charge"
+    # }, {
+    #     "start": {
+    #         "hour": 12,
+    #         "minute": 0
+    #     },
+    #     "end": {
+    #         "hour": 15,
+    #         "minute": 0
+    #     },
+    #     "mode": "discharge_arbitrage"
+    # }, {
+    #     "start": {
+    #         "hour": 15,
+    #         "minute": 0
+    #     },
+    #     "end": {
+    #         "hour": 23,
+    #         "minute": 59
+    #     },
+    #     "mode": "charge"
+    # }]
 
-    return temp_schedule
+    return schedule
     
 ### Class Definition ###
 class EnergyControl:
