@@ -9,7 +9,7 @@ def car_flow(parameter_dict):
     car_coming_in = random.uniform(0,1)
     if parameter_dict['carFlow'] == "high":
         if car_coming_in <= high_car_flow:
-             return True
+            return True
         else:
             return False
     elif parameter_dict['carFlow'] == "medium":
