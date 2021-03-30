@@ -14,12 +14,13 @@ def predict_ev_init(sio):
     @sio.on('Generate EV Prediction')
     def generate_ev_predict(historic_data, ev_predict_params, list_timestamps):
 
+        #If there are empty elements then return an empty list 
         empty_list = []
-        if not historic_data[0]['aggregatedData'] or not historic_data[1]['aggregatedData'] or not historic_data[2]['aggregatedData'] or not historic_data[3]['aggregatedData']:
+        if not historic_data[0]['aggregatedData'] or not historic_data[1]['aggregatedData'] or not historic_data[2]['aggregatedData']:
             return empty_list
 
     
-        # A search function is created to search for different time period keys
+        #A search function is created to search for different time period keys
         
         def search(interval):
             for p in historic_data:
