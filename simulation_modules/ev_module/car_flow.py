@@ -3,9 +3,9 @@ from random import randrange, gauss
 from datetime import time, datetime
 
 def car_flow(parameter_dict):
-    high_car_flow = 0.7
-    med_car_flow = 0.3
-    low_car_flow = 0.15
+    high_car_flow = 0.8
+    med_car_flow = 0.5
+    low_car_flow = 0.25
     car_coming_in = random.uniform(0,1)
     if parameter_dict['carFlow'] == "high":
         if car_coming_in <= high_car_flow:

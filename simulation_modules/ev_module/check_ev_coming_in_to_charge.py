@@ -6,7 +6,7 @@ from simulation_modules.ev_module.car_flow import car_flow
 def check_ev_coming_in_to_charge(ev_start_time, parameter_dict):
     ev_start_time_hour = ev_start_time.hour
     chance_ev_wants_charge = random.uniform(0, 1) # this the chance that ev comes in and wants to charge
-    probability_of_ev = float(parameter_dict['percentageOfEv']) #Default Value
+    probability_of_ev = float(parameter_dict['percentageOfEv'])*2 #Default Value
     car_type = random.uniform(0,1)
     car_in = car_flow(parameter_dict)      
      

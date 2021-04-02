@@ -188,16 +188,16 @@ def predict_ev_init(sio):
         output_past_week_hourly_lvl2 = clf.predict(df_input_lvl2_past_week_hourly)
         output_past_week_hourly_lvl3 = clf.predict(df_input_lvl3_past_week_hourly)
 
-        #Weights for conservative, aggressive predictions, and neutral predictions 
+        #Weights for conservative, aggressive predictions, and neutral predictions
 
-        conservative_prediction = 0.6
-        neutral_prediction = 0.3
-        aggressive_prediction = 0.1
+        weight_classifier_past_month = ev_predict_params["WeightPastMonth"]
+        weight_classifier_past_year = ev_predict_params["WeightPastYear"]
+        weight_classifier_past_week_hourly = ev_predict_params["WeightPastWeek"]
 
         #Add lvl2 and lvl3 charger outputs
       
-        sum_of_lvl2 = (1/3)*(output_past_month_lvl2 + output_past_year_lvl2 + output_past_week_hourly_lvl2)
-        sum_of_lvl3 = (1/3)*(output_past_month_lvl3 + output_past_year_lvl3 + output_past_week_hourly_lvl3)
+        sum_of_lvl2 = weight_classifier_past_month*output_past_month_lvl2 + weight_classifier_past_year*output_past_year_lvl2 + weight_classifier_past_week_hourly*output_past_week_hourly_lvl2
+        sum_of_lvl3 = weight_classifier_past_month*output_past_month_lvl3 + weight_classifier_past_year*output_past_year_lvl3 + weight_classifier_past_week_hourly*output_past_week_hourly_lvl3
 
         final_output = sum_of_lvl2 + sum_of_lvl3
 
